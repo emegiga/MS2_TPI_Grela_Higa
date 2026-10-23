@@ -96,7 +96,7 @@ A completar en entrega final
 | `etapa-diagnostico` | Diagnóstico de calidad, deuda técnica y code smells | ✅ Entrega 2 |
 | `etapa-refactoring` | Aplicación de SOLID, Clean Code y refactorings | ⏳ Pendiente |
 | `etapa-pruebas` | Casos de prueba y verificación antes/después | ⏳ Pendiente |
-| `etapa-docs` | Code review y documentación final | ⏳ Pendiente |
+| `etapa-docs` | Code review y documentación final | ✅ Code review ⏳ Code review |
 | `estado-refactorizado` | Versión final mejorada | ⏳ Pendiente |
 
 ---
