@@ -5,7 +5,6 @@ import tupad.ms2.model.NuevaSolicitud;
 import tupad.ms2.model.Responsable;
 import tupad.ms2.model.Solicitud;
 import tupad.ms2.model.enums.Estado;
-import tupad.ms2.model.enums.Prioridad;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 import tupad.ms2.repositorio.EstudianteRepositorio;
 import tupad.ms2.repositorio.ResponsableRepositorio;
@@ -13,9 +12,9 @@ import tupad.ms2.repositorio.SolicitudRepositorio;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Casos de uso del sistema. Coordina repositorios y entidades; las reglas viven en el dominio.
@@ -62,63 +61,16 @@ public class GestorSolicitudes {
         return solicitud;
     }
 
-    // Buscar / Filtrar
-    public List<Solicitud> buscar(String criterio, String valor) {
-        List<Solicitud> resultado = new ArrayList<>();
-        if (criterio.equals("estado")) {
-            for (Solicitud solicitud : solicitudes.listarTodas()) {
-                if (solicitud.getEstado().toString().equalsIgnoreCase(valor)) {
-                    resultado.add(solicitud);
-                }
-            }
-        } else if (criterio.equals("tipo")) {
-            for (Solicitud solicitud : solicitudes.listarTodas()) {
-                if (solicitud.getTipo().name().equalsIgnoreCase(valor)) {
-                    resultado.add(solicitud);
-                }
-            }
-        } else if (criterio.equals("legajo")) {
-            for (Solicitud solicitud : solicitudes.listarTodas()) {
-                if (solicitud.getEstudiante().getLegajo().equals(valor)) {
-                    resultado.add(solicitud);
-                }
-            }
-        } else if (criterio.equals("prioridad")) {
-            for (Solicitud solicitud : solicitudes.listarTodas()) {
-                if (String.valueOf(solicitud.getPrioridad().getCodigo()).equals(valor)) {
-                    resultado.add(solicitud);
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("criterio no soportado: " + criterio);
-        }
-        return resultado;
+    // Buscar / Filtrar: el criterio llega como un filtro ya armado (ver FiltrosSolicitud)
+    public List<Solicitud> buscar(Predicate<Solicitud> filtro) {
+        return solicitudes.listarTodas().stream()
+                .filter(filtro)
+                .toList();
     }
 
-    // Reporte
-    public void reporte() {
-        List<Solicitud> todas = solicitudes.listarTodas();
-        int pendientes = 0, enProceso = 0, resueltas = 0, rechazadas = 0;
-        int alta = 0, media = 0, baja = 0;
-        System.out.println("===== REPORTE DE SOLICITUDES =====");
-        for (Solicitud solicitud : todas) {
-            String responsable = solicitud.tieneResponsable() ? solicitud.getResponsable().getNombreConArea() : "SIN ASIGNAR";
-            System.out.println("#" + solicitud.getId() + " | " + solicitud.getFecha() + " | " + solicitud.getEstudiante().getNombre()
-                    + " | " + solicitud.getTipo() + " | Prioridad: " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado()
-                    + " | " + responsable);
-            if (solicitud.getEstado() == Estado.PENDIENTE) pendientes++;
-            if (solicitud.getEstado() == Estado.EN_PROCESO) enProceso++;
-            if (solicitud.getEstado() == Estado.RESUELTA) resueltas++;
-            if (solicitud.getEstado() == Estado.RECHAZADA) rechazadas++;
-            if (solicitud.getPrioridad() == Prioridad.ALTA) alta++;
-            if (solicitud.getPrioridad() == Prioridad.MEDIA) media++;
-            if (solicitud.getPrioridad() == Prioridad.BAJA) baja++;
-        }
-        System.out.println("-----------------------------------");
-        System.out.println("Total: " + todas.size());
-        System.out.println("Pendientes: " + pendientes + " | En proceso: " + enProceso
-                + " | Resueltas: " + resueltas + " | Rechazadas: " + rechazadas);
-        System.out.println("Alta: " + alta + " | Media: " + media + " | Baja: " + baja);
+    // Reporte: devuelve los datos calculados, sin imprimir nada
+    public ResumenSolicitudes generarReporte() {
+        return new ResumenSolicitudes(solicitudes.listarTodas());
     }
 
     public List<Solicitud> getSolicitudes() {

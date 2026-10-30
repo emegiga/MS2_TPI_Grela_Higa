@@ -12,11 +12,14 @@ import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 import tupad.ms2.repositorio.EstudianteRepositorioEnMemoria;
 import tupad.ms2.repositorio.ResponsableRepositorioEnMemoria;
 import tupad.ms2.repositorio.SolicitudRepositorioEnMemoria;
+import tupad.ms2.servicio.FiltrosSolicitud;
 import tupad.ms2.servicio.GestorSolicitudes;
+import tupad.ms2.servicio.ResumenSolicitudes;
 
 import java.time.Clock;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class Main {
     public static void main(String[] args) {
@@ -42,7 +45,7 @@ public class Main {
             } else if (opcion.equals("4")) {
                 buscarSolicitudes(scanner, gestor);
             } else if (opcion.equals("5")) {
-                gestor.reporte();
+                mostrarReporte(gestor.generarReporte());
             } else if (opcion.equals("0")) {
                 salir = true;
             } else {
@@ -176,58 +179,53 @@ public class Main {
     }
 
     private static void buscarSolicitudes(Scanner scanner, GestorSolicitudes gestor) {
-        String[] criterios = {"estado", "tipo", "legajo", "prioridad"};
         int indiceCriterio = elegir(scanner, "Buscar por:", new String[]{"Estado", "Tipo", "Legajo", "Prioridad"});
-        String valor = null;
-
-        if (indiceCriterio == 0) {
-            valor = elegirValorEstado(scanner);
-        } else if (indiceCriterio == 1) {
-            valor = elegirValorTipo(scanner);
-        } else if (indiceCriterio == 2) {
-            valor = elegirValorLegajo(scanner, gestor);
-        } else if (indiceCriterio == 3) {
-            valor = elegirValorPrioridad(scanner);
-        }
-
-        if (valor != null) {
-            mostrarResultados(gestor.buscar(criterios[indiceCriterio], valor));
+        Predicate<Solicitud> filtro = switch (indiceCriterio) {
+            case 0 -> elegirFiltroEstado(scanner);
+            case 1 -> elegirFiltroTipo(scanner);
+            case 2 -> elegirFiltroLegajo(scanner, gestor);
+            case 3 -> elegirFiltroPrioridad(scanner);
+            default -> null;
+        };
+        if (filtro != null) {
+            mostrarResultados(gestor.buscar(filtro));
         }
     }
 
-    private static String elegirValorEstado(Scanner scanner) {
-        String[] nombresEstados = nombres(Estado.values());
-        int indiceEstado = elegir(scanner, "Estado:", nombresEstados);
-        return indiceEstado == -1 ? null : nombresEstados[indiceEstado];
+    private static Predicate<Solicitud> elegirFiltroEstado(Scanner scanner) {
+        Estado[] estados = Estado.values();
+        int indiceEstado = elegir(scanner, "Estado:", nombres(estados));
+        return indiceEstado == -1 ? null : FiltrosSolicitud.porEstado(estados[indiceEstado]);
     }
 
-    private static String elegirValorTipo(Scanner scanner) {
-        String[] tipos = nombres(TipoSolicitud.values());
-        int indiceTipo = elegir(scanner, "Tipo:", tipos);
-        return indiceTipo == -1 ? null : tipos[indiceTipo];
+    private static Predicate<Solicitud> elegirFiltroTipo(Scanner scanner) {
+        TipoSolicitud[] tipos = TipoSolicitud.values();
+        int indiceTipo = elegir(scanner, "Tipo:", nombres(tipos));
+        return indiceTipo == -1 ? null : FiltrosSolicitud.porTipo(tipos[indiceTipo]);
     }
 
-    private static String elegirValorLegajo(Scanner scanner, GestorSolicitudes gestor) {
-        if (gestor.getEstudiantes().isEmpty()) {
+    private static Predicate<Solicitud> elegirFiltroLegajo(Scanner scanner, GestorSolicitudes gestor) {
+        List<Estudiante> estudiantes = gestor.getEstudiantes();
+        if (estudiantes.isEmpty()) {
             System.out.println("No hay estudiantes cargados.");
             return null;
         }
-        String[] opcionesLegajos = new String[gestor.getEstudiantes().size()];
+        String[] opcionesLegajos = new String[estudiantes.size()];
         for (int i = 0; i < opcionesLegajos.length; i++) {
-            opcionesLegajos[i] = gestor.getEstudiantes().get(i).getLegajo() + " - " + gestor.getEstudiantes().get(i).getNombre();
+            opcionesLegajos[i] = estudiantes.get(i).getLegajo() + " - " + estudiantes.get(i).getNombre();
         }
         int indiceEstudiante = elegir(scanner, "Estudiante:", opcionesLegajos);
-        return indiceEstudiante == -1 ? null : gestor.getEstudiantes().get(indiceEstudiante).getLegajo();
+        return indiceEstudiante == -1 ? null : FiltrosSolicitud.porLegajo(estudiantes.get(indiceEstudiante).getLegajo());
     }
 
-    private static String elegirValorPrioridad(Scanner scanner) {
+    private static Predicate<Solicitud> elegirFiltroPrioridad(Scanner scanner) {
         Prioridad[] prioridades = Prioridad.values();
         String[] etiquetas = new String[prioridades.length];
         for (int i = 0; i < prioridades.length; i++) {
             etiquetas[i] = prioridades[i].getEtiqueta();
         }
         int indicePrioridad = elegir(scanner, "Prioridad:", etiquetas);
-        return indicePrioridad == -1 ? null : String.valueOf(prioridades[indicePrioridad].getCodigo());
+        return indicePrioridad == -1 ? null : FiltrosSolicitud.porPrioridad(prioridades[indicePrioridad]);
     }
 
     private static void mostrarResultados(List<Solicitud> resultados) {
@@ -280,13 +278,32 @@ public class Main {
         return -1;
     }
 
+    private static void mostrarReporte(ResumenSolicitudes resumen) {
+        System.out.println("===== REPORTE DE SOLICITUDES =====");
+        for (Solicitud solicitud : resumen.getSolicitudes()) {
+            System.out.println("#" + solicitud.getId() + " | " + solicitud.getFecha() + " | " + solicitud.getEstudiante().getNombre()
+                    + " | " + solicitud.getTipo() + " | Prioridad: " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado()
+                    + " | " + describirResponsable(solicitud));
+        }
+        System.out.println("-----------------------------------");
+        System.out.println("Total: " + resumen.getTotal());
+        System.out.println("Pendientes: " + resumen.getTotal(Estado.PENDIENTE) + " | En proceso: " + resumen.getTotal(Estado.EN_PROCESO)
+                + " | Resueltas: " + resumen.getTotal(Estado.RESUELTA) + " | Rechazadas: " + resumen.getTotal(Estado.RECHAZADA));
+        System.out.println("Alta: " + resumen.getTotal(Prioridad.ALTA) + " | Media: " + resumen.getTotal(Prioridad.MEDIA)
+                + " | Baja: " + resumen.getTotal(Prioridad.BAJA));
+    }
+
+    private static String describirResponsable(Solicitud solicitud) {
+        return solicitud.tieneResponsable() ? solicitud.getResponsable().getNombreConArea() : "SIN ASIGNAR";
+    }
+
     // Lista todas las solicitudes con su estado y responsable
     private static void listarSolicitudes(GestorSolicitudes gestor) {
         System.out.println("--- Solicitudes ---");
         for (Solicitud solicitud : gestor.getSolicitudes()) {
-            String responsable = solicitud.tieneResponsable() ? solicitud.getResponsable().getNombreConArea() : "SIN ASIGNAR";
             System.out.println("#" + solicitud.getId() + " | " + solicitud.getEstudiante().getNombre() + " | " + solicitud.getTipo()
-                    + " | Prioridad " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado() + " | " + responsable);
+                    + " | Prioridad " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado()
+                    + " | " + describirResponsable(solicitud));
         }
     }
 }
