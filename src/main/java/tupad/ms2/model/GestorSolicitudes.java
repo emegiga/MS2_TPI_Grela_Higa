@@ -61,12 +61,7 @@ public class GestorSolicitudes {
 
     // Registrar solicitud
     public int registrarSolicitud(String legajo, String tipo, String descripcion, int prioridad) {
-        Estudiante estudiante = null;
-        for (Estudiante candidato : estudiantes) {
-            if (candidato.legajo.equals(legajo)) {
-                estudiante = candidato;
-            }
-        }
+        Estudiante estudiante = buscarEstudiantePorLegajo(legajo);
         if (estudiante == null) {
             System.out.println("Error: estudiante no encontrado");
             return -1;
@@ -94,12 +89,7 @@ public class GestorSolicitudes {
 
     // Cambiar estado de solicitud
     public boolean cambiarEstado(int id, String nuevoEstado) {
-        Solicitud solicitud = null;
-        for (Solicitud candidata : solicitudes) {
-            if (candidata.id == id) {
-                solicitud = candidata;
-            }
-        }
+        Solicitud solicitud = buscarSolicitudPorId(id);
         if (solicitud == null) {
             System.out.println("Error: solicitud no encontrada");
             return false;
@@ -139,12 +129,7 @@ public class GestorSolicitudes {
 
     // Asignar responsable (del listado) a solicitud
     public boolean asignarResponsable(int id, int idResponsable) {
-        Solicitud solicitud = null;
-        for (Solicitud candidata : solicitudes) {
-            if (candidata.id == id) {
-                solicitud = candidata;
-            }
-        }
+        Solicitud solicitud = buscarSolicitudPorId(id);
         if (solicitud == null) {
             System.out.println("Error: solicitud no encontrada");
             return false;
@@ -153,12 +138,7 @@ public class GestorSolicitudes {
             System.out.println("Error: la solicitud esta cerrada");
             return false;
         }
-        Responsable responsable = null;
-        for (Responsable candidato : responsables) {
-            if (candidato.id == idResponsable) {
-                responsable = candidato;
-            }
-        }
+        Responsable responsable = buscarResponsablePorId(idResponsable);
         if (responsable == null) {
             System.out.println("Error: responsable no encontrado");
             return false;
@@ -225,5 +205,33 @@ public class GestorSolicitudes {
         System.out.println("Pendientes: " + pendientes + " | En proceso: " + enProceso
                 + " | Resueltas: " + resueltas + " | Rechazadas: " + rechazadas);
         System.out.println("Alta: " + alta + " | Media: " + media + " | Baja: " + baja);
+    }
+
+    // Devuelve la solicitud con ese id, o null si no existe
+    public Solicitud buscarSolicitudPorId(int id) {
+        for (Solicitud candidata : solicitudes) {
+            if (candidata.id == id) {
+                return candidata;
+            }
+        }
+        return null;
+    }
+
+    private Estudiante buscarEstudiantePorLegajo(String legajo) {
+        for (Estudiante candidato : estudiantes) {
+            if (candidato.legajo.equals(legajo)) {
+                return candidato;
+            }
+        }
+        return null;
+    }
+
+    private Responsable buscarResponsablePorId(int idResponsable) {
+        for (Responsable candidato : responsables) {
+            if (candidato.id == idResponsable) {
+                return candidato;
+            }
+        }
+        return null;
     }
 }
