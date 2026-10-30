@@ -2,7 +2,6 @@ package tupad.ms2.model;
 
 import tupad.ms2.model.enums.Estado;
 import tupad.ms2.model.enums.Prioridad;
-import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.time.LocalDate;
@@ -63,16 +62,16 @@ public class GestorSolicitudes {
     }
 
     // Registrar solicitud. Devuelve la solicitud creada.
-    public Solicitud registrarSolicitud(String legajo, TipoSolicitud tipo, String descripcion, Prioridad prioridad) {
-        Estudiante estudiante = buscarEstudiantePorLegajo(legajo);
+    public Solicitud registrarSolicitud(NuevaSolicitud datos) {
+        Estudiante estudiante = buscarEstudiantePorLegajo(datos.legajo());
         if (estudiante == null) {
             throw new ReglaDeNegocioException("estudiante no encontrado");
         }
-        if (descripcion == null || descripcion.length() < 5) {
+        if (datos.descripcion() == null || datos.descripcion().length() < 5) {
             throw new ReglaDeNegocioException("descripcion muy corta");
         }
 
-        Solicitud solicitud = new Solicitud(proximoId, estudiante, tipo, prioridad, descripcion, LocalDate.now().toString());
+        Solicitud solicitud = new Solicitud(proximoId, estudiante, datos, LocalDate.now().toString());
         proximoId++;
         solicitudes.add(solicitud);
         return solicitud;

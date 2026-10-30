@@ -2,6 +2,7 @@ package tupad.ms2;
 
 import tupad.ms2.model.Estudiante;
 import tupad.ms2.model.GestorSolicitudes;
+import tupad.ms2.model.NuevaSolicitud;
 import tupad.ms2.model.Responsable;
 import tupad.ms2.model.Solicitud;
 import tupad.ms2.model.enums.Estado;
@@ -77,7 +78,8 @@ public class Main {
         int codigoPrioridad = Integer.parseInt(scanner.nextLine());
         try {
             Prioridad prioridad = Prioridad.desdeCodigo(codigoPrioridad);
-            Solicitud registrada = gestor.registrarSolicitud(estudiante.legajo, tipos[indiceTipo], descripcion, prioridad);
+            NuevaSolicitud datos = new NuevaSolicitud(estudiante.legajo, tipos[indiceTipo], prioridad, descripcion);
+            Solicitud registrada = gestor.registrarSolicitud(datos);
             System.out.println("Solicitud registrada con id " + registrada.id);
         } catch (ReglaDeNegocioException ex) {
             mostrarError(ex);
@@ -231,9 +233,9 @@ public class Main {
     // Precarga de solicitudes al iniciar (estudiantes y responsables ya vienen cargados desde GestorSolicitudes).
     // Como el gestor ya no imprime, no hace falta silenciar la salida estandar.
     private static void cargarDatosEjemplo(GestorSolicitudes gestor) {
-        gestor.registrarSolicitud("L1001", TipoSolicitud.CONSTANCIA, "Constancia de alumno regular", Prioridad.MEDIA);
-        gestor.registrarSolicitud("L1002", TipoSolicitud.RECLAMO, "Error en nota del parcial", Prioridad.ALTA);
-        gestor.registrarSolicitud("L1001", TipoSolicitud.EQUIVALENCIA, "Equivalencia de Matematica I", Prioridad.BAJA);
+        gestor.registrarSolicitud(new NuevaSolicitud("L1001", TipoSolicitud.CONSTANCIA, Prioridad.MEDIA, "Constancia de alumno regular"));
+        gestor.registrarSolicitud(new NuevaSolicitud("L1002", TipoSolicitud.RECLAMO, Prioridad.ALTA, "Error en nota del parcial"));
+        gestor.registrarSolicitud(new NuevaSolicitud("L1001", TipoSolicitud.EQUIVALENCIA, Prioridad.BAJA, "Equivalencia de Matematica I"));
         gestor.asignarResponsable(2, 1);   // Maria Ortega Sánchez (Alumnado)
         gestor.cambiarEstado(2, Estado.EN_PROCESO);
     }

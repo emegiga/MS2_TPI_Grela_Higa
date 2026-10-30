@@ -15,12 +15,12 @@ public class Solicitud {
     public String descripcion;
     public String fecha;
 
-    public Solicitud(int id, Estudiante estudiante, TipoSolicitud tipo, Prioridad prioridad, String descripcion, String fecha) {
+    public Solicitud(int id, Estudiante estudiante, NuevaSolicitud datos, String fecha) {
         this.id = id;
         this.estudiante = estudiante;
-        this.tipo = tipo;
-        this.prioridad = prioridad;
-        this.descripcion = descripcion;
+        this.tipo = datos.tipo();
+        this.prioridad = datos.prioridad();
+        this.descripcion = datos.descripcion();
         this.fecha = fecha;
         this.estado = Estado.PENDIENTE;
     }
