@@ -57,7 +57,7 @@ public class Main {
     }
 
     private static void registrarSolicitud(Scanner scanner, GestorSolicitudes gestor) {
-        if (gestor.estudiantes.isEmpty()) {
+        if (gestor.getEstudiantes().isEmpty()) {
             System.out.println("No hay estudiantes cargados.");
             return;
         }
@@ -78,22 +78,22 @@ public class Main {
         int codigoPrioridad = Integer.parseInt(scanner.nextLine());
         try {
             Prioridad prioridad = Prioridad.desdeCodigo(codigoPrioridad);
-            NuevaSolicitud datos = new NuevaSolicitud(estudiante.legajo, tipos[indiceTipo], prioridad, descripcion);
+            NuevaSolicitud datos = new NuevaSolicitud(estudiante.getLegajo(), tipos[indiceTipo], prioridad, descripcion);
             Solicitud registrada = gestor.registrarSolicitud(datos);
-            System.out.println("Solicitud registrada con id " + registrada.id);
+            System.out.println("Solicitud registrada con id " + registrada.getId());
         } catch (ReglaDeNegocioException ex) {
             mostrarError(ex);
         }
     }
 
     private static Estudiante elegirEstudiante(Scanner scanner, GestorSolicitudes gestor) {
-        String[] opcionesEstudiantes = new String[gestor.estudiantes.size()];
+        String[] opcionesEstudiantes = new String[gestor.getEstudiantes().size()];
         for (int i = 0; i < opcionesEstudiantes.length; i++) {
-            Estudiante estudiante = gestor.estudiantes.get(i);
-            opcionesEstudiantes[i] = estudiante.legajo + " - " + estudiante.nombre + " (" + estudiante.email + ")";
+            Estudiante estudiante = gestor.getEstudiantes().get(i);
+            opcionesEstudiantes[i] = estudiante.getLegajo() + " - " + estudiante.getNombre() + " (" + estudiante.getEmail() + ")";
         }
         int indiceEstudiante = elegir(scanner, "Estudiante:", opcionesEstudiantes);
-        return indiceEstudiante == -1 ? null : gestor.estudiantes.get(indiceEstudiante);
+        return indiceEstudiante == -1 ? null : gestor.getEstudiantes().get(indiceEstudiante);
     }
 
     private static void cambiarEstado(Scanner scanner, GestorSolicitudes gestor) {
@@ -103,7 +103,7 @@ public class Main {
         }
         Estado[] estados;
         if (!solicitud.tieneResponsable()) {
-            System.out.println("La solicitud #" + solicitud.id + " no tiene responsable asignado. "
+            System.out.println("La solicitud #" + solicitud.getId() + " no tiene responsable asignado. "
                     + "Solo puede rechazarse; para otros estados asignelo desde la opcion 3.");
             estados = new Estado[]{Estado.RECHAZADA};
         } else {
@@ -114,8 +114,8 @@ public class Main {
             return;
         }
         try {
-            Solicitud actualizada = gestor.cambiarEstado(solicitud.id, estados[indiceEstado]);
-            System.out.println("Estado actualizado a " + actualizada.estado);
+            Solicitud actualizada = gestor.cambiarEstado(solicitud.getId(), estados[indiceEstado]);
+            System.out.println("Estado actualizado a " + actualizada.getEstado());
         } catch (ReglaDeNegocioException ex) {
             mostrarError(ex);
         }
@@ -127,21 +127,21 @@ public class Main {
             return;
         }
         if (solicitud.tieneResponsable()) {
-            System.out.println("Responsable actual: " + solicitud.responsable.getNombreConArea()
+            System.out.println("Responsable actual: " + solicitud.getResponsable().getNombreConArea()
                     + ". Si elegis otro, se reemplaza.");
         }
-        String[] opcionesResponsables = new String[gestor.responsables.size()];
+        String[] opcionesResponsables = new String[gestor.getResponsables().size()];
         for (int i = 0; i < opcionesResponsables.length; i++) {
-            opcionesResponsables[i] = gestor.responsables.get(i).getNombreConArea();
+            opcionesResponsables[i] = gestor.getResponsables().get(i).getNombreConArea();
         }
         int indiceResponsable = elegir(scanner, "Responsable:", opcionesResponsables);
         if (indiceResponsable == -1) {
             return;
         }
-        Responsable elegido = gestor.responsables.get(indiceResponsable);
+        Responsable elegido = gestor.getResponsables().get(indiceResponsable);
         try {
-            gestor.asignarResponsable(solicitud.id, elegido.id);
-            System.out.println("Responsable asignado: " + elegido.nombre);
+            gestor.asignarResponsable(solicitud.getId(), elegido.getId());
+            System.out.println("Responsable asignado: " + elegido.getNombre());
         } catch (ReglaDeNegocioException ex) {
             mostrarError(ex);
         }
@@ -150,7 +150,7 @@ public class Main {
     // Lista las solicitudes, pide un id y devuelve la solicitud si existe y no esta cerrada.
     // Informa el motivo y devuelve null en cualquier otro caso.
     private static Solicitud elegirSolicitudAbierta(Scanner scanner, GestorSolicitudes gestor) {
-        if (gestor.solicitudes.isEmpty()) {
+        if (gestor.getSolicitudes().isEmpty()) {
             System.out.println("No hay solicitudes cargadas.");
             return null;
         }
@@ -200,16 +200,16 @@ public class Main {
     }
 
     private static String elegirValorLegajo(Scanner scanner, GestorSolicitudes gestor) {
-        if (gestor.estudiantes.isEmpty()) {
+        if (gestor.getEstudiantes().isEmpty()) {
             System.out.println("No hay estudiantes cargados.");
             return null;
         }
-        String[] opcionesLegajos = new String[gestor.estudiantes.size()];
+        String[] opcionesLegajos = new String[gestor.getEstudiantes().size()];
         for (int i = 0; i < opcionesLegajos.length; i++) {
-            opcionesLegajos[i] = gestor.estudiantes.get(i).legajo + " - " + gestor.estudiantes.get(i).nombre;
+            opcionesLegajos[i] = gestor.getEstudiantes().get(i).getLegajo() + " - " + gestor.getEstudiantes().get(i).getNombre();
         }
         int indiceEstudiante = elegir(scanner, "Estudiante:", opcionesLegajos);
-        return indiceEstudiante == -1 ? null : gestor.estudiantes.get(indiceEstudiante).legajo;
+        return indiceEstudiante == -1 ? null : gestor.getEstudiantes().get(indiceEstudiante).getLegajo();
     }
 
     private static String elegirValorPrioridad(Scanner scanner) {
@@ -224,8 +224,8 @@ public class Main {
 
     private static void mostrarResultados(List<Solicitud> resultados) {
         for (Solicitud solicitud : resultados) {
-            System.out.println("#" + solicitud.id + " | " + solicitud.estudiante.nombre + " | " + solicitud.tipo
-                    + " | Prioridad: " + solicitud.prioridad.getCodigo() + " | " + solicitud.estado);
+            System.out.println("#" + solicitud.getId() + " | " + solicitud.getEstudiante().getNombre() + " | " + solicitud.getTipo()
+                    + " | Prioridad: " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado());
         }
         System.out.println("Resultados: " + resultados.size());
     }
@@ -285,10 +285,10 @@ public class Main {
     // Lista todas las solicitudes con su estado y responsable
     private static void listarSolicitudes(GestorSolicitudes gestor) {
         System.out.println("--- Solicitudes ---");
-        for (Solicitud solicitud : gestor.solicitudes) {
-            String responsable = solicitud.tieneResponsable() ? solicitud.responsable.getNombreConArea() : "SIN ASIGNAR";
-            System.out.println("#" + solicitud.id + " | " + solicitud.estudiante.nombre + " | " + solicitud.tipo
-                    + " | Prioridad " + solicitud.prioridad.getCodigo() + " | " + solicitud.estado + " | " + responsable);
+        for (Solicitud solicitud : gestor.getSolicitudes()) {
+            String responsable = solicitud.tieneResponsable() ? solicitud.getResponsable().getNombreConArea() : "SIN ASIGNAR";
+            System.out.println("#" + solicitud.getId() + " | " + solicitud.getEstudiante().getNombre() + " | " + solicitud.getTipo()
+                    + " | Prioridad " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado() + " | " + responsable);
         }
     }
 }

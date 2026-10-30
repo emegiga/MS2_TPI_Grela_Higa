@@ -6,14 +6,15 @@ import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GestorSolicitudes {
 
-    public List<Solicitud> solicitudes = new ArrayList<>();
-    public List<Estudiante> estudiantes = new ArrayList<>();
-    public List<Responsable> responsables = new ArrayList<>();
-    int proximoId = 1;
+    private final List<Solicitud> solicitudes = new ArrayList<>();
+    private final List<Estudiante> estudiantes = new ArrayList<>();
+    private final List<Responsable> responsables = new ArrayList<>();
+    private int proximoId = 1;
 
     public GestorSolicitudes() {
         cargarEstudiantes();
@@ -67,10 +68,6 @@ public class GestorSolicitudes {
         if (estudiante == null) {
             throw new ReglaDeNegocioException("estudiante no encontrado");
         }
-        if (datos.descripcion() == null || datos.descripcion().length() < 5) {
-            throw new ReglaDeNegocioException("descripcion muy corta");
-        }
-
         Solicitud solicitud = new Solicitud(proximoId, estudiante, datos, LocalDate.now().toString());
         proximoId++;
         solicitudes.add(solicitud);
@@ -100,25 +97,25 @@ public class GestorSolicitudes {
         List<Solicitud> resultado = new ArrayList<>();
         if (criterio.equals("estado")) {
             for (Solicitud solicitud : solicitudes) {
-                if (solicitud.estado.toString().equalsIgnoreCase(valor)) {
+                if (solicitud.getEstado().toString().equalsIgnoreCase(valor)) {
                     resultado.add(solicitud);
                 }
             }
         } else if (criterio.equals("tipo")) {
             for (Solicitud solicitud : solicitudes) {
-                if (solicitud.tipo.name().equalsIgnoreCase(valor)) {
+                if (solicitud.getTipo().name().equalsIgnoreCase(valor)) {
                     resultado.add(solicitud);
                 }
             }
         } else if (criterio.equals("legajo")) {
             for (Solicitud solicitud : solicitudes) {
-                if (solicitud.estudiante.legajo.equals(valor)) {
+                if (solicitud.getEstudiante().getLegajo().equals(valor)) {
                     resultado.add(solicitud);
                 }
             }
         } else if (criterio.equals("prioridad")) {
             for (Solicitud solicitud : solicitudes) {
-                if (String.valueOf(solicitud.prioridad.getCodigo()).equals(valor)) {
+                if (String.valueOf(solicitud.getPrioridad().getCodigo()).equals(valor)) {
                     resultado.add(solicitud);
                 }
             }
@@ -134,23 +131,36 @@ public class GestorSolicitudes {
         int alta = 0, media = 0, baja = 0;
         System.out.println("===== REPORTE DE SOLICITUDES =====");
         for (Solicitud solicitud : solicitudes) {
-            String responsable = solicitud.tieneResponsable() ? solicitud.responsable.getNombreConArea() : "SIN ASIGNAR";
-            System.out.println("#" + solicitud.id + " | " + solicitud.fecha + " | " + solicitud.estudiante.nombre
-                    + " | " + solicitud.tipo + " | Prioridad: " + solicitud.prioridad.getCodigo() + " | " + solicitud.estado
+            String responsable = solicitud.tieneResponsable() ? solicitud.getResponsable().getNombreConArea() : "SIN ASIGNAR";
+            System.out.println("#" + solicitud.getId() + " | " + solicitud.getFecha() + " | " + solicitud.getEstudiante().getNombre()
+                    + " | " + solicitud.getTipo() + " | Prioridad: " + solicitud.getPrioridad().getCodigo() + " | " + solicitud.getEstado()
                     + " | " + responsable);
-            if (solicitud.estado == Estado.PENDIENTE) pendientes++;
-            if (solicitud.estado == Estado.EN_PROCESO) enProceso++;
-            if (solicitud.estado == Estado.RESUELTA) resueltas++;
-            if (solicitud.estado == Estado.RECHAZADA) rechazadas++;
-            if (solicitud.prioridad == Prioridad.ALTA) alta++;
-            if (solicitud.prioridad == Prioridad.MEDIA) media++;
-            if (solicitud.prioridad == Prioridad.BAJA) baja++;
+            if (solicitud.getEstado() == Estado.PENDIENTE) pendientes++;
+            if (solicitud.getEstado() == Estado.EN_PROCESO) enProceso++;
+            if (solicitud.getEstado() == Estado.RESUELTA) resueltas++;
+            if (solicitud.getEstado() == Estado.RECHAZADA) rechazadas++;
+            if (solicitud.getPrioridad() == Prioridad.ALTA) alta++;
+            if (solicitud.getPrioridad() == Prioridad.MEDIA) media++;
+            if (solicitud.getPrioridad() == Prioridad.BAJA) baja++;
         }
         System.out.println("-----------------------------------");
         System.out.println("Total: " + solicitudes.size());
         System.out.println("Pendientes: " + pendientes + " | En proceso: " + enProceso
                 + " | Resueltas: " + resueltas + " | Rechazadas: " + rechazadas);
         System.out.println("Alta: " + alta + " | Media: " + media + " | Baja: " + baja);
+    }
+
+    // Vistas de solo lectura: nadie fuera del gestor puede agregar o quitar elementos
+    public List<Solicitud> getSolicitudes() {
+        return Collections.unmodifiableList(solicitudes);
+    }
+
+    public List<Estudiante> getEstudiantes() {
+        return Collections.unmodifiableList(estudiantes);
+    }
+
+    public List<Responsable> getResponsables() {
+        return Collections.unmodifiableList(responsables);
     }
 
     private Solicitud obtenerSolicitud(int id) {
@@ -164,7 +174,7 @@ public class GestorSolicitudes {
     // Devuelve la solicitud con ese id, o null si no existe
     public Solicitud buscarSolicitudPorId(int id) {
         for (Solicitud candidata : solicitudes) {
-            if (candidata.id == id) {
+            if (candidata.getId() == id) {
                 return candidata;
             }
         }
@@ -173,7 +183,7 @@ public class GestorSolicitudes {
 
     private Estudiante buscarEstudiantePorLegajo(String legajo) {
         for (Estudiante candidato : estudiantes) {
-            if (candidato.legajo.equals(legajo)) {
+            if (candidato.getLegajo().equals(legajo)) {
                 return candidato;
             }
         }
@@ -182,7 +192,7 @@ public class GestorSolicitudes {
 
     private Responsable buscarResponsablePorId(int idResponsable) {
         for (Responsable candidato : responsables) {
-            if (candidato.id == idResponsable) {
+            if (candidato.getId() == idResponsable) {
                 return candidato;
             }
         }
