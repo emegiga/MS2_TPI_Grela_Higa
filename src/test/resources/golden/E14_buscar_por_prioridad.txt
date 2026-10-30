@@ -1,0 +1,66 @@
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Prioridad:
+1. Alta
+2. Media
+3. Baja
+Opcion: #2 | Lucia Kempes | RECLAMO | Prioridad: 1 | EN_PROCESO
+Resultados: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Prioridad:
+1. Alta
+2. Media
+3. Baja
+Opcion: #1 | Agustin Di Maria | CONSTANCIA | Prioridad: 2 | PENDIENTE
+Resultados: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Prioridad:
+1. Alta
+2. Media
+3. Baja
+Opcion: #3 | Agustin Di Maria | EQUIVALENCIA | Prioridad: 3 | PENDIENTE
+Resultados: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: 

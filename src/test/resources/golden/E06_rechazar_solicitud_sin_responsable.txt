@@ -1,0 +1,41 @@
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: --- Solicitudes ---
+#1 | Agustin Di Maria | CONSTANCIA | Prioridad 2 | PENDIENTE | SIN ASIGNAR
+#2 | Lucia Kempes | RECLAMO | Prioridad 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
+#3 | Agustin Di Maria | EQUIVALENCIA | Prioridad 3 | PENDIENTE | SIN ASIGNAR
+Id solicitud: La solicitud #1 no tiene responsable asignado. Solo puede rechazarse; para otros estados asignelo desde la opcion 3.
+Nuevo estado:
+1. RECHAZADA
+Opcion: Estado actualizado a RECHAZADA
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+#1 | {HOY} | Agustin Di Maria | CONSTANCIA | Prioridad: 2 | RECHAZADA | SIN ASIGNAR
+#2 | {HOY} | Lucia Kempes | RECLAMO | Prioridad: 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
+#3 | {HOY} | Agustin Di Maria | EQUIVALENCIA | Prioridad: 3 | PENDIENTE | SIN ASIGNAR
+-----------------------------------
+Total: 3
+Pendientes: 1 | En proceso: 1 | Resueltas: 0 | Rechazadas: 1
+Alta: 1 | Media: 1 | Baja: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: 

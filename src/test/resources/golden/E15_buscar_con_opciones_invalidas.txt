@@ -1,0 +1,95 @@
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Opcion invalida
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Estado:
+1. PENDIENTE
+2. EN_PROCESO
+3. RESUELTA
+4. RECHAZADA
+Opcion: Opcion invalida
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Estudiante:
+1. L1001 - Agustin Di Maria
+2. L1002 - Lucia Kempes
+3. L1003 - Tomas Maradona
+4. L1004 - Valentina Passarella
+5. L1005 - Nicolas Fillol
+6. L1006 - Camila Batistuta
+7. L1007 - Franco Houseman
+8. L1008 - Martina Ardiles
+9. L1009 - Santiago Bertoni
+10. L1010 - Julieta Valdano
+11. L1011 - Mateo Ruggeri
+12. L1012 - Florencia Gallego
+13. L1013 - Benjamin Tarantini
+14. L1014 - Sofia Houseman
+15. L1015 - Facundo Rattin
+16. L1016 - Micaela Sivori
+17. L1017 - Ignacio Labruna
+18. L1018 - Paula Ayala
+19. L1019 - Agustin Caniggia
+20. L1020 - Julian Brown
+Opcion: Opcion invalida
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Buscar por:
+1. Estado
+2. Tipo
+3. Legajo
+4. Prioridad
+Opcion: Prioridad:
+1. Alta
+2. Media
+3. Baja
+Opcion: Opcion invalida
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: 

@@ -19,4 +19,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    // Permite regenerar los archivos golden: gradlew test -Dgolden.regenerar=true
+    systemProperty 'golden.regenerar', System.getProperty('golden.regenerar', 'false')
+    testLogging {
+        events 'passed', 'failed', 'skipped'
+    }
 }

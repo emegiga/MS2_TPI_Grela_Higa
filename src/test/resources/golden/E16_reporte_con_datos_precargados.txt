@@ -1,0 +1,25 @@
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+#1 | {HOY} | Agustin Di Maria | CONSTANCIA | Prioridad: 2 | PENDIENTE | SIN ASIGNAR
+#2 | {HOY} | Lucia Kempes | RECLAMO | Prioridad: 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
+#3 | {HOY} | Agustin Di Maria | EQUIVALENCIA | Prioridad: 3 | PENDIENTE | SIN ASIGNAR
+-----------------------------------
+Total: 3
+Pendientes: 2 | En proceso: 1 | Resueltas: 0 | Rechazadas: 0
+Alta: 1 | Media: 1 | Baja: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: 
