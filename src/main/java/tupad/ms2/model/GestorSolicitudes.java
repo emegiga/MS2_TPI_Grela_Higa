@@ -1,6 +1,7 @@
 package tupad.ms2.model;
 
 import tupad.ms2.model.enums.Estado;
+import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,93 +60,68 @@ public class GestorSolicitudes {
         }
     }
 
-    // Registrar solicitud
-    public int registrarSolicitud(String legajo, String tipo, String descripcion, int prioridad) {
+    // Registrar solicitud. Devuelve la solicitud creada.
+    public Solicitud registrarSolicitud(String legajo, String tipo, String descripcion, int prioridad) {
         Estudiante estudiante = buscarEstudiantePorLegajo(legajo);
         if (estudiante == null) {
-            System.out.println("Error: estudiante no encontrado");
-            return -1;
+            throw new ReglaDeNegocioException("estudiante no encontrado");
         }
         if (!tipo.equals("CONSTANCIA") && !tipo.equals("EQUIVALENCIA")
                 && !tipo.equals("RECLAMO") && !tipo.equals("OTRO")) {
-            System.out.println("Error: tipo invalido");
-            return -1;
+            throw new ReglaDeNegocioException("tipo invalido");
         }
         if (prioridad < 1 || prioridad > 3) {
-            System.out.println("Error: prioridad invalida");
-            return -1;
+            throw new ReglaDeNegocioException("prioridad invalida");
         }
         if (descripcion == null || descripcion.length() < 5) {
-            System.out.println("Error: descripcion muy corta");
-            return -1;
+            throw new ReglaDeNegocioException("descripcion muy corta");
         }
 
         Solicitud solicitud = new Solicitud(proximoId, estudiante, tipo, prioridad, descripcion, LocalDate.now().toString());
         proximoId++;
         solicitudes.add(solicitud);
-        System.out.println("Solicitud registrada con id " + solicitud.id);
-        return solicitud.id;
+        return solicitud;
     }
 
-    // Cambiar estado de solicitud
-    public boolean cambiarEstado(int id, String nuevoEstado) {
-        Solicitud solicitud = buscarSolicitudPorId(id);
-        if (solicitud == null) {
-            System.out.println("Error: solicitud no encontrada");
-            return false;
-        }
+    // Cambiar estado de solicitud. Devuelve la solicitud actualizada.
+    public Solicitud cambiarEstado(int id, String nuevoEstado) {
+        Solicitud solicitud = obtenerSolicitud(id);
         if (nuevoEstado.equals("EN_PROCESO")) {
-            if (solicitud.estado == Estado.PENDIENTE) {
-                if (solicitud.responsable == null) {
-                    System.out.println("Error: debe asignar responsable primero");
-                    return false;
-                }
-                solicitud.estado = Estado.EN_PROCESO;
-            } else {
-                System.out.println("Error: transicion invalida");
-                return false;
+            if (solicitud.estado != Estado.PENDIENTE) {
+                throw new ReglaDeNegocioException("transicion invalida");
             }
+            if (solicitud.responsable == null) {
+                throw new ReglaDeNegocioException("debe asignar responsable primero");
+            }
+            solicitud.estado = Estado.EN_PROCESO;
         } else if (nuevoEstado.equals("RESUELTA")) {
-            if (solicitud.estado == Estado.EN_PROCESO) {
-                solicitud.estado = Estado.RESUELTA;
-            } else {
-                System.out.println("Error: transicion invalida");
-                return false;
+            if (solicitud.estado != Estado.EN_PROCESO) {
+                throw new ReglaDeNegocioException("transicion invalida");
             }
+            solicitud.estado = Estado.RESUELTA;
         } else if (nuevoEstado.equals("RECHAZADA")) {
-            if (solicitud.estado == Estado.PENDIENTE || solicitud.estado == Estado.EN_PROCESO) {
-                solicitud.estado = Estado.RECHAZADA;
-            } else {
-                System.out.println("Error: transicion invalida");
-                return false;
+            if (solicitud.estado != Estado.PENDIENTE && solicitud.estado != Estado.EN_PROCESO) {
+                throw new ReglaDeNegocioException("transicion invalida");
             }
+            solicitud.estado = Estado.RECHAZADA;
         } else {
-            System.out.println("Error: estado desconocido");
-            return false;
+            throw new ReglaDeNegocioException("estado desconocido");
         }
-        System.out.println("Estado actualizado a " + solicitud.estado);
-        return true;
+        return solicitud;
     }
 
-    // Asignar responsable (del listado) a solicitud
-    public boolean asignarResponsable(int id, int idResponsable) {
-        Solicitud solicitud = buscarSolicitudPorId(id);
-        if (solicitud == null) {
-            System.out.println("Error: solicitud no encontrada");
-            return false;
-        }
+    // Asignar responsable (del listado) a solicitud. Devuelve la solicitud actualizada.
+    public Solicitud asignarResponsable(int id, int idResponsable) {
+        Solicitud solicitud = obtenerSolicitud(id);
         if (solicitud.estado == Estado.RESUELTA || solicitud.estado == Estado.RECHAZADA) {
-            System.out.println("Error: la solicitud esta cerrada");
-            return false;
+            throw new ReglaDeNegocioException("la solicitud esta cerrada");
         }
         Responsable responsable = buscarResponsablePorId(idResponsable);
         if (responsable == null) {
-            System.out.println("Error: responsable no encontrado");
-            return false;
+            throw new ReglaDeNegocioException("responsable no encontrado");
         }
         solicitud.responsable = responsable;
-        System.out.println("Responsable asignado: " + responsable.nombre);
-        return true;
+        return solicitud;
     }
 
     // Buscar / Filtrar
@@ -176,7 +152,7 @@ public class GestorSolicitudes {
                 }
             }
         } else {
-            System.out.println("Criterio no soportado");
+            throw new IllegalArgumentException("criterio no soportado: " + criterio);
         }
         return resultado;
     }
@@ -205,6 +181,14 @@ public class GestorSolicitudes {
         System.out.println("Pendientes: " + pendientes + " | En proceso: " + enProceso
                 + " | Resueltas: " + resueltas + " | Rechazadas: " + rechazadas);
         System.out.println("Alta: " + alta + " | Media: " + media + " | Baja: " + baja);
+    }
+
+    private Solicitud obtenerSolicitud(int id) {
+        Solicitud solicitud = buscarSolicitudPorId(id);
+        if (solicitud == null) {
+            throw new ReglaDeNegocioException("solicitud no encontrada");
+        }
+        return solicitud;
     }
 
     // Devuelve la solicitud con ese id, o null si no existe

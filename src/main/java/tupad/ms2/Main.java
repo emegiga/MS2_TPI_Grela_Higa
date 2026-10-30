@@ -5,9 +5,8 @@ import tupad.ms2.model.GestorSolicitudes;
 import tupad.ms2.model.Responsable;
 import tupad.ms2.model.Solicitud;
 import tupad.ms2.model.enums.Estado;
+import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -74,7 +73,12 @@ public class Main {
         String descripcion = scanner.nextLine();
         System.out.print("Prioridad (1=alta, 2=media, 3=baja): ");
         int prioridad = Integer.parseInt(scanner.nextLine());
-        gestor.registrarSolicitud(estudiante.legajo, tipos[indiceTipo], descripcion, prioridad);
+        try {
+            Solicitud registrada = gestor.registrarSolicitud(estudiante.legajo, tipos[indiceTipo], descripcion, prioridad);
+            System.out.println("Solicitud registrada con id " + registrada.id);
+        } catch (ReglaDeNegocioException ex) {
+            mostrarError(ex);
+        }
     }
 
     private static Estudiante elegirEstudiante(Scanner scanner, GestorSolicitudes gestor) {
@@ -101,8 +105,14 @@ public class Main {
             estados = new String[]{"EN_PROCESO", "RESUELTA", "RECHAZADA"};
         }
         int indiceEstado = elegir(scanner, "Nuevo estado:", estados);
-        if (indiceEstado != -1) {
-            gestor.cambiarEstado(solicitud.id, estados[indiceEstado]);
+        if (indiceEstado == -1) {
+            return;
+        }
+        try {
+            Solicitud actualizada = gestor.cambiarEstado(solicitud.id, estados[indiceEstado]);
+            System.out.println("Estado actualizado a " + actualizada.estado);
+        } catch (ReglaDeNegocioException ex) {
+            mostrarError(ex);
         }
     }
 
@@ -121,9 +131,15 @@ public class Main {
             opcionesResponsables[i] = responsable.nombre + " (" + responsable.area + ")";
         }
         int indiceResponsable = elegir(scanner, "Responsable:", opcionesResponsables);
-        if (indiceResponsable != -1) {
-            Responsable elegido = gestor.responsables.get(indiceResponsable);
+        if (indiceResponsable == -1) {
+            return;
+        }
+        Responsable elegido = gestor.responsables.get(indiceResponsable);
+        try {
             gestor.asignarResponsable(solicitud.id, elegido.id);
+            System.out.println("Responsable asignado: " + elegido.nombre);
+        } catch (ReglaDeNegocioException ex) {
+            mostrarError(ex);
         }
     }
 
@@ -209,19 +225,18 @@ public class Main {
         System.out.println("Resultados: " + resultados.size());
     }
 
-    // Precarga de solicitudes al iniciar, sin mostrar los mensajes del gestor (estudiantes y responsables ya vienen cargados desde GestorSolicitudes)
+    // Precarga de solicitudes al iniciar (estudiantes y responsables ya vienen cargados desde GestorSolicitudes).
+    // Como el gestor ya no imprime, no hace falta silenciar la salida estandar.
     private static void cargarDatosEjemplo(GestorSolicitudes gestor) {
-        PrintStream salidaOriginal = System.out;
-        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
-        try {
-            gestor.registrarSolicitud("L1001", "CONSTANCIA", "Constancia de alumno regular", 2);
-            gestor.registrarSolicitud("L1002", "RECLAMO", "Error en nota del parcial", 1);
-            gestor.registrarSolicitud("L1001", "EQUIVALENCIA", "Equivalencia de Matematica I", 3);
-            gestor.asignarResponsable(2, 1);   // Maria Ortega Sánchez (Alumnado)
-            gestor.cambiarEstado(2, "EN_PROCESO");
-        } finally {
-            System.setOut(salidaOriginal);
-        }
+        gestor.registrarSolicitud("L1001", "CONSTANCIA", "Constancia de alumno regular", 2);
+        gestor.registrarSolicitud("L1002", "RECLAMO", "Error en nota del parcial", 1);
+        gestor.registrarSolicitud("L1001", "EQUIVALENCIA", "Equivalencia de Matematica I", 3);
+        gestor.asignarResponsable(2, 1);   // Maria Ortega Sánchez (Alumnado)
+        gestor.cambiarEstado(2, "EN_PROCESO");
+    }
+
+    private static void mostrarError(ReglaDeNegocioException ex) {
+        System.out.println("Error: " + ex.getMessage());
     }
 
     // Pide un ID y devuelve la solicitud correspondiente, o null si no existe o no es un numero
