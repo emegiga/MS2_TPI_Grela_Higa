@@ -1,0 +1,96 @@
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Estudiante:
+1. L1001 - Agustin Di Maria (agustin87@gmail.com)
+2. L1002 - Lucia Kempes (lucia.kempes@outlook.com)
+3. L1003 - Tomas Maradona (tomas.mdz@hotmail.com)
+4. L1004 - Valentina Passarella (vale.passarella@yahoo.com)
+5. L1005 - Nicolas Fillol (nfillol23@gmail.com)
+6. L1006 - Camila Batistuta (camila.batistuta@outlook.com)
+7. L1007 - Franco Houseman (fr.houseman@gmail.com)
+8. L1008 - Martina Ardiles (martina.ardiles@hotmail.com)
+9. L1009 - Santiago Bertoni (sbert0ni@yahoo.com)
+10. L1010 - Julieta Valdano (julieta.valdano@gmail.com)
+11. L1011 - Mateo Ruggeri (mateo.ruggeri@outlook.com)
+12. L1012 - Florencia Gallego (flor.gallego@hotmail.com)
+13. L1013 - Benjamin Tarantini (benja.tarantini@gmail.com)
+14. L1014 - Sofia Houseman (sofia.h77@yahoo.com)
+15. L1015 - Facundo Rattin (facundo.rattin@outlook.com)
+16. L1016 - Micaela Sivori (mica.sivori@gmail.com)
+17. L1017 - Ignacio Labruna (ignacio.labruna@hotmail.com)
+18. L1018 - Paula Ayala (paula.ayala@yahoo.com)
+19. L1019 - Agustin Caniggia (agus.caniggia@gmail.com)
+20. L1020 - Julian Brown (julian.brown@outlook.com)
+Opcion: Tipo:
+1. CONSTANCIA
+2. EQUIVALENCIA
+3. RECLAMO
+4. OTRO
+Opcion: Descripcion: Prioridad (1=alta, 2=media, 3=baja): Error: descripcion muy corta
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: Estudiante:
+1. L1001 - Agustin Di Maria (agustin87@gmail.com)
+2. L1002 - Lucia Kempes (lucia.kempes@outlook.com)
+3. L1003 - Tomas Maradona (tomas.mdz@hotmail.com)
+4. L1004 - Valentina Passarella (vale.passarella@yahoo.com)
+5. L1005 - Nicolas Fillol (nfillol23@gmail.com)
+6. L1006 - Camila Batistuta (camila.batistuta@outlook.com)
+7. L1007 - Franco Houseman (fr.houseman@gmail.com)
+8. L1008 - Martina Ardiles (martina.ardiles@hotmail.com)
+9. L1009 - Santiago Bertoni (sbert0ni@yahoo.com)
+10. L1010 - Julieta Valdano (julieta.valdano@gmail.com)
+11. L1011 - Mateo Ruggeri (mateo.ruggeri@outlook.com)
+12. L1012 - Florencia Gallego (flor.gallego@hotmail.com)
+13. L1013 - Benjamin Tarantini (benja.tarantini@gmail.com)
+14. L1014 - Sofia Houseman (sofia.h77@yahoo.com)
+15. L1015 - Facundo Rattin (facundo.rattin@outlook.com)
+16. L1016 - Micaela Sivori (mica.sivori@gmail.com)
+17. L1017 - Ignacio Labruna (ignacio.labruna@hotmail.com)
+18. L1018 - Paula Ayala (paula.ayala@yahoo.com)
+19. L1019 - Agustin Caniggia (agus.caniggia@gmail.com)
+20. L1020 - Julian Brown (julian.brown@outlook.com)
+Opcion: Tipo:
+1. CONSTANCIA
+2. EQUIVALENCIA
+3. RECLAMO
+4. OTRO
+Opcion: Descripcion: Prioridad (1=alta, 2=media, 3=baja): Solicitud registrada con id 4
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+#1 | {HOY} | Agustin Di Maria | CONSTANCIA | Prioridad: 2 | PENDIENTE | SIN ASIGNAR
+#2 | {HOY} | Lucia Kempes | RECLAMO | Prioridad: 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
+#3 | {HOY} | Agustin Di Maria | EQUIVALENCIA | Prioridad: 3 | PENDIENTE | SIN ASIGNAR
+#4 | {HOY} | Tomas Maradona | CONSTANCIA | Prioridad: 2 | PENDIENTE | SIN ASIGNAR
+-----------------------------------
+Total: 4
+Pendientes: 3 | En proceso: 1 | Resueltas: 0 | Rechazadas: 0
+Alta: 1 | Media: 2 | Baja: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: 

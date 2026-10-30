@@ -75,6 +75,10 @@ class CaracterizacionConsolaTest {
                         "2", "4", "1",
                         "2", "4", "2",
                         "4", "1", "3",
+                        "5", "0"),
+                escenario("E19_registro_fallido_no_consume_id",
+                        "1", "3", "1", "abc", "2",
+                        "1", "3", "1", "Constancia para tramite de pasantia", "2",
                         "5", "0")
         );
     }
