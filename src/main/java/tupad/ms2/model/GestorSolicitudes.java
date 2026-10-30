@@ -1,6 +1,8 @@
 package tupad.ms2.model;
 
 import tupad.ms2.model.enums.Estado;
+import tupad.ms2.model.enums.Prioridad;
+import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.time.LocalDate;
@@ -61,17 +63,10 @@ public class GestorSolicitudes {
     }
 
     // Registrar solicitud. Devuelve la solicitud creada.
-    public Solicitud registrarSolicitud(String legajo, String tipo, String descripcion, int prioridad) {
+    public Solicitud registrarSolicitud(String legajo, TipoSolicitud tipo, String descripcion, Prioridad prioridad) {
         Estudiante estudiante = buscarEstudiantePorLegajo(legajo);
         if (estudiante == null) {
             throw new ReglaDeNegocioException("estudiante no encontrado");
-        }
-        if (!tipo.equals("CONSTANCIA") && !tipo.equals("EQUIVALENCIA")
-                && !tipo.equals("RECLAMO") && !tipo.equals("OTRO")) {
-            throw new ReglaDeNegocioException("tipo invalido");
-        }
-        if (prioridad < 1 || prioridad > 3) {
-            throw new ReglaDeNegocioException("prioridad invalida");
         }
         if (descripcion == null || descripcion.length() < 5) {
             throw new ReglaDeNegocioException("descripcion muy corta");
@@ -84,18 +79,10 @@ public class GestorSolicitudes {
     }
 
     // Cambiar estado de solicitud. Devuelve la solicitud actualizada.
-    public Solicitud cambiarEstado(int id, String nuevoEstado) {
+    public Solicitud cambiarEstado(int id, Estado nuevoEstado) {
         Solicitud solicitud = obtenerSolicitud(id);
-        solicitud.cambiarEstado(convertirEstado(nuevoEstado));
+        solicitud.cambiarEstado(nuevoEstado);
         return solicitud;
-    }
-
-    private Estado convertirEstado(String nombreEstado) {
-        try {
-            return Estado.valueOf(nombreEstado);
-        } catch (IllegalArgumentException ex) {
-            throw new ReglaDeNegocioException("estado desconocido");
-        }
     }
 
     // Asignar responsable (del listado) a solicitud. Devuelve la solicitud actualizada.
@@ -120,7 +107,7 @@ public class GestorSolicitudes {
             }
         } else if (criterio.equals("tipo")) {
             for (Solicitud solicitud : solicitudes) {
-                if (solicitud.tipo.equalsIgnoreCase(valor)) {
+                if (solicitud.tipo.name().equalsIgnoreCase(valor)) {
                     resultado.add(solicitud);
                 }
             }
@@ -132,7 +119,7 @@ public class GestorSolicitudes {
             }
         } else if (criterio.equals("prioridad")) {
             for (Solicitud solicitud : solicitudes) {
-                if (String.valueOf(solicitud.prioridad).equals(valor)) {
+                if (String.valueOf(solicitud.prioridad.getCodigo()).equals(valor)) {
                     resultado.add(solicitud);
                 }
             }
@@ -150,15 +137,15 @@ public class GestorSolicitudes {
         for (Solicitud solicitud : solicitudes) {
             String responsable = solicitud.tieneResponsable() ? solicitud.responsable.getNombreConArea() : "SIN ASIGNAR";
             System.out.println("#" + solicitud.id + " | " + solicitud.fecha + " | " + solicitud.estudiante.nombre
-                    + " | " + solicitud.tipo + " | Prioridad: " + solicitud.prioridad + " | " + solicitud.estado
+                    + " | " + solicitud.tipo + " | Prioridad: " + solicitud.prioridad.getCodigo() + " | " + solicitud.estado
                     + " | " + responsable);
             if (solicitud.estado == Estado.PENDIENTE) pendientes++;
             if (solicitud.estado == Estado.EN_PROCESO) enProceso++;
             if (solicitud.estado == Estado.RESUELTA) resueltas++;
             if (solicitud.estado == Estado.RECHAZADA) rechazadas++;
-            if (solicitud.prioridad == 1) alta++;
-            if (solicitud.prioridad == 2) media++;
-            if (solicitud.prioridad == 3) baja++;
+            if (solicitud.prioridad == Prioridad.ALTA) alta++;
+            if (solicitud.prioridad == Prioridad.MEDIA) media++;
+            if (solicitud.prioridad == Prioridad.BAJA) baja++;
         }
         System.out.println("-----------------------------------");
         System.out.println("Total: " + solicitudes.size());

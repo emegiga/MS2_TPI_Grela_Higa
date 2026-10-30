@@ -5,6 +5,8 @@ import tupad.ms2.model.GestorSolicitudes;
 import tupad.ms2.model.Responsable;
 import tupad.ms2.model.Solicitud;
 import tupad.ms2.model.enums.Estado;
+import tupad.ms2.model.enums.Prioridad;
+import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.util.List;
@@ -63,8 +65,8 @@ public class Main {
             System.out.println("Registro cancelado.");
             return;
         }
-        String[] tipos = {"CONSTANCIA", "EQUIVALENCIA", "RECLAMO", "OTRO"};
-        int indiceTipo = elegir(scanner, "Tipo:", tipos);
+        TipoSolicitud[] tipos = TipoSolicitud.values();
+        int indiceTipo = elegir(scanner, "Tipo:", nombres(tipos));
         if (indiceTipo == -1) {
             System.out.println("Registro cancelado.");
             return;
@@ -72,8 +74,9 @@ public class Main {
         System.out.print("Descripcion: ");
         String descripcion = scanner.nextLine();
         System.out.print("Prioridad (1=alta, 2=media, 3=baja): ");
-        int prioridad = Integer.parseInt(scanner.nextLine());
+        int codigoPrioridad = Integer.parseInt(scanner.nextLine());
         try {
+            Prioridad prioridad = Prioridad.desdeCodigo(codigoPrioridad);
             Solicitud registrada = gestor.registrarSolicitud(estudiante.legajo, tipos[indiceTipo], descripcion, prioridad);
             System.out.println("Solicitud registrada con id " + registrada.id);
         } catch (ReglaDeNegocioException ex) {
@@ -96,15 +99,15 @@ public class Main {
         if (solicitud == null) {
             return;
         }
-        String[] estados;
+        Estado[] estados;
         if (!solicitud.tieneResponsable()) {
             System.out.println("La solicitud #" + solicitud.id + " no tiene responsable asignado. "
                     + "Solo puede rechazarse; para otros estados asignelo desde la opcion 3.");
-            estados = new String[]{"RECHAZADA"};
+            estados = new Estado[]{Estado.RECHAZADA};
         } else {
-            estados = new String[]{"EN_PROCESO", "RESUELTA", "RECHAZADA"};
+            estados = new Estado[]{Estado.EN_PROCESO, Estado.RESUELTA, Estado.RECHAZADA};
         }
-        int indiceEstado = elegir(scanner, "Nuevo estado:", estados);
+        int indiceEstado = elegir(scanner, "Nuevo estado:", nombres(estados));
         if (indiceEstado == -1) {
             return;
         }
@@ -183,17 +186,13 @@ public class Main {
     }
 
     private static String elegirValorEstado(Scanner scanner) {
-        Estado[] estados = Estado.values();
-        String[] nombresEstados = new String[estados.length];
-        for (int i = 0; i < estados.length; i++) {
-            nombresEstados[i] = estados[i].toString();
-        }
+        String[] nombresEstados = nombres(Estado.values());
         int indiceEstado = elegir(scanner, "Estado:", nombresEstados);
         return indiceEstado == -1 ? null : nombresEstados[indiceEstado];
     }
 
     private static String elegirValorTipo(Scanner scanner) {
-        String[] tipos = {"CONSTANCIA", "EQUIVALENCIA", "RECLAMO", "OTRO"};
+        String[] tipos = nombres(TipoSolicitud.values());
         int indiceTipo = elegir(scanner, "Tipo:", tipos);
         return indiceTipo == -1 ? null : tipos[indiceTipo];
     }
@@ -212,14 +211,19 @@ public class Main {
     }
 
     private static String elegirValorPrioridad(Scanner scanner) {
-        int indicePrioridad = elegir(scanner, "Prioridad:", new String[]{"Alta", "Media", "Baja"});
-        return indicePrioridad == -1 ? null : String.valueOf(indicePrioridad + 1);
+        Prioridad[] prioridades = Prioridad.values();
+        String[] etiquetas = new String[prioridades.length];
+        for (int i = 0; i < prioridades.length; i++) {
+            etiquetas[i] = prioridades[i].getEtiqueta();
+        }
+        int indicePrioridad = elegir(scanner, "Prioridad:", etiquetas);
+        return indicePrioridad == -1 ? null : String.valueOf(prioridades[indicePrioridad].getCodigo());
     }
 
     private static void mostrarResultados(List<Solicitud> resultados) {
         for (Solicitud solicitud : resultados) {
             System.out.println("#" + solicitud.id + " | " + solicitud.estudiante.nombre + " | " + solicitud.tipo
-                    + " | Prioridad: " + solicitud.prioridad + " | " + solicitud.estado);
+                    + " | Prioridad: " + solicitud.prioridad.getCodigo() + " | " + solicitud.estado);
         }
         System.out.println("Resultados: " + resultados.size());
     }
@@ -227,11 +231,11 @@ public class Main {
     // Precarga de solicitudes al iniciar (estudiantes y responsables ya vienen cargados desde GestorSolicitudes).
     // Como el gestor ya no imprime, no hace falta silenciar la salida estandar.
     private static void cargarDatosEjemplo(GestorSolicitudes gestor) {
-        gestor.registrarSolicitud("L1001", "CONSTANCIA", "Constancia de alumno regular", 2);
-        gestor.registrarSolicitud("L1002", "RECLAMO", "Error en nota del parcial", 1);
-        gestor.registrarSolicitud("L1001", "EQUIVALENCIA", "Equivalencia de Matematica I", 3);
+        gestor.registrarSolicitud("L1001", TipoSolicitud.CONSTANCIA, "Constancia de alumno regular", Prioridad.MEDIA);
+        gestor.registrarSolicitud("L1002", TipoSolicitud.RECLAMO, "Error en nota del parcial", Prioridad.ALTA);
+        gestor.registrarSolicitud("L1001", TipoSolicitud.EQUIVALENCIA, "Equivalencia de Matematica I", Prioridad.BAJA);
         gestor.asignarResponsable(2, 1);   // Maria Ortega Sánchez (Alumnado)
-        gestor.cambiarEstado(2, "EN_PROCESO");
+        gestor.cambiarEstado(2, Estado.EN_PROCESO);
     }
 
     private static void mostrarError(ReglaDeNegocioException ex) {
@@ -247,6 +251,14 @@ public class Main {
         } catch (NumberFormatException ex) {
             return null;
         }
+    }
+
+    private static String[] nombres(Enum<?>[] valores) {
+        String[] nombres = new String[valores.length];
+        for (int i = 0; i < valores.length; i++) {
+            nombres[i] = valores[i].name();
+        }
+        return nombres;
     }
 
     // Muestra una lista numerada y devuelve el indice elegido (0-based), o -1 si es invalido
@@ -274,7 +286,7 @@ public class Main {
         for (Solicitud solicitud : gestor.solicitudes) {
             String responsable = solicitud.tieneResponsable() ? solicitud.responsable.getNombreConArea() : "SIN ASIGNAR";
             System.out.println("#" + solicitud.id + " | " + solicitud.estudiante.nombre + " | " + solicitud.tipo
-                    + " | Prioridad " + solicitud.prioridad + " | " + solicitud.estado + " | " + responsable);
+                    + " | Prioridad " + solicitud.prioridad.getCodigo() + " | " + solicitud.estado + " | " + responsable);
         }
     }
 }
