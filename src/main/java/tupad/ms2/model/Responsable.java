@@ -10,4 +10,9 @@ public class Responsable {
         this.nombre = nombre;
         this.area = area;
     }
+
+    // Formato con el que se muestra al responsable en toda la aplicacion, ej: "Laura Gorosito (Secretaria Academica)"
+    public String getNombreConArea() {
+        return nombre + " (" + area + ")";
+    }
 }

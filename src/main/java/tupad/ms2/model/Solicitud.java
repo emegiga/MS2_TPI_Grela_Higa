@@ -1,6 +1,7 @@
 package tupad.ms2.model;
 
 import tupad.ms2.model.enums.Estado;
+import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 public class Solicitud {
     public int id;
@@ -20,5 +21,30 @@ public class Solicitud {
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.estado = Estado.PENDIENTE;
+    }
+
+    public boolean estaCerrada() {
+        return estado.esCerrado();
+    }
+
+    public boolean tieneResponsable() {
+        return responsable != null;
+    }
+
+    public void cambiarEstado(Estado nuevoEstado) {
+        if (!estado.permiteTransicionA(nuevoEstado)) {
+            throw new ReglaDeNegocioException("transicion invalida");
+        }
+        if (nuevoEstado == Estado.EN_PROCESO && !tieneResponsable()) {
+            throw new ReglaDeNegocioException("debe asignar responsable primero");
+        }
+        estado = nuevoEstado;
+    }
+
+    public void asignarResponsable(Responsable nuevoResponsable) {
+        if (estaCerrada()) {
+            throw new ReglaDeNegocioException("la solicitud esta cerrada");
+        }
+        responsable = nuevoResponsable;
     }
 }

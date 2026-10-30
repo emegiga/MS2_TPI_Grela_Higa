@@ -97,7 +97,7 @@ public class Main {
             return;
         }
         String[] estados;
-        if (solicitud.responsable == null) {
+        if (!solicitud.tieneResponsable()) {
             System.out.println("La solicitud #" + solicitud.id + " no tiene responsable asignado. "
                     + "Solo puede rechazarse; para otros estados asignelo desde la opcion 3.");
             estados = new String[]{"RECHAZADA"};
@@ -121,14 +121,13 @@ public class Main {
         if (solicitud == null) {
             return;
         }
-        if (solicitud.responsable != null) {
-            System.out.println("Responsable actual: " + solicitud.responsable.nombre + " ("
-                    + solicitud.responsable.area + "). Si elegis otro, se reemplaza.");
+        if (solicitud.tieneResponsable()) {
+            System.out.println("Responsable actual: " + solicitud.responsable.getNombreConArea()
+                    + ". Si elegis otro, se reemplaza.");
         }
         String[] opcionesResponsables = new String[gestor.responsables.size()];
         for (int i = 0; i < opcionesResponsables.length; i++) {
-            Responsable responsable = gestor.responsables.get(i);
-            opcionesResponsables[i] = responsable.nombre + " (" + responsable.area + ")";
+            opcionesResponsables[i] = gestor.responsables.get(i).getNombreConArea();
         }
         int indiceResponsable = elegir(scanner, "Responsable:", opcionesResponsables);
         if (indiceResponsable == -1) {
@@ -156,7 +155,7 @@ public class Main {
             System.out.println("Error: solicitud no encontrada");
             return null;
         }
-        if (solicitud.estado == Estado.RESUELTA || solicitud.estado == Estado.RECHAZADA) {
+        if (solicitud.estaCerrada()) {
             System.out.println("Error: la solicitud esta cerrada");
             return null;
         }
@@ -273,8 +272,7 @@ public class Main {
     private static void listarSolicitudes(GestorSolicitudes gestor) {
         System.out.println("--- Solicitudes ---");
         for (Solicitud solicitud : gestor.solicitudes) {
-            String responsable = (solicitud.responsable == null) ? "SIN ASIGNAR"
-                    : solicitud.responsable.nombre + " (" + solicitud.responsable.area + ")";
+            String responsable = solicitud.tieneResponsable() ? solicitud.responsable.getNombreConArea() : "SIN ASIGNAR";
             System.out.println("#" + solicitud.id + " | " + solicitud.estudiante.nombre + " | " + solicitud.tipo
                     + " | Prioridad " + solicitud.prioridad + " | " + solicitud.estado + " | " + responsable);
         }

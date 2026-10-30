@@ -86,41 +86,26 @@ public class GestorSolicitudes {
     // Cambiar estado de solicitud. Devuelve la solicitud actualizada.
     public Solicitud cambiarEstado(int id, String nuevoEstado) {
         Solicitud solicitud = obtenerSolicitud(id);
-        if (nuevoEstado.equals("EN_PROCESO")) {
-            if (solicitud.estado != Estado.PENDIENTE) {
-                throw new ReglaDeNegocioException("transicion invalida");
-            }
-            if (solicitud.responsable == null) {
-                throw new ReglaDeNegocioException("debe asignar responsable primero");
-            }
-            solicitud.estado = Estado.EN_PROCESO;
-        } else if (nuevoEstado.equals("RESUELTA")) {
-            if (solicitud.estado != Estado.EN_PROCESO) {
-                throw new ReglaDeNegocioException("transicion invalida");
-            }
-            solicitud.estado = Estado.RESUELTA;
-        } else if (nuevoEstado.equals("RECHAZADA")) {
-            if (solicitud.estado != Estado.PENDIENTE && solicitud.estado != Estado.EN_PROCESO) {
-                throw new ReglaDeNegocioException("transicion invalida");
-            }
-            solicitud.estado = Estado.RECHAZADA;
-        } else {
+        solicitud.cambiarEstado(convertirEstado(nuevoEstado));
+        return solicitud;
+    }
+
+    private Estado convertirEstado(String nombreEstado) {
+        try {
+            return Estado.valueOf(nombreEstado);
+        } catch (IllegalArgumentException ex) {
             throw new ReglaDeNegocioException("estado desconocido");
         }
-        return solicitud;
     }
 
     // Asignar responsable (del listado) a solicitud. Devuelve la solicitud actualizada.
     public Solicitud asignarResponsable(int id, int idResponsable) {
         Solicitud solicitud = obtenerSolicitud(id);
-        if (solicitud.estado == Estado.RESUELTA || solicitud.estado == Estado.RECHAZADA) {
-            throw new ReglaDeNegocioException("la solicitud esta cerrada");
-        }
         Responsable responsable = buscarResponsablePorId(idResponsable);
         if (responsable == null) {
             throw new ReglaDeNegocioException("responsable no encontrado");
         }
-        solicitud.responsable = responsable;
+        solicitud.asignarResponsable(responsable);
         return solicitud;
     }
 
@@ -163,8 +148,7 @@ public class GestorSolicitudes {
         int alta = 0, media = 0, baja = 0;
         System.out.println("===== REPORTE DE SOLICITUDES =====");
         for (Solicitud solicitud : solicitudes) {
-            String responsable = (solicitud.responsable == null) ? "SIN ASIGNAR"
-                    : solicitud.responsable.nombre + " (" + solicitud.responsable.area + ")";
+            String responsable = solicitud.tieneResponsable() ? solicitud.responsable.getNombreConArea() : "SIN ASIGNAR";
             System.out.println("#" + solicitud.id + " | " + solicitud.fecha + " | " + solicitud.estudiante.nombre
                     + " | " + solicitud.tipo + " | Prioridad: " + solicitud.prioridad + " | " + solicitud.estado
                     + " | " + responsable);
