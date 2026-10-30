@@ -100,9 +100,12 @@ public class MenuConsola {
             return;
         }
         String descripcion = consola.leerLinea("Descripcion: ");
-        int codigoPrioridad = Integer.parseInt(consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): "));
+        String codigoPrioridad = consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): ");
         try {
-            Prioridad prioridad = Prioridad.desdeCodigo(codigoPrioridad);
+            // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango (antes cerraba el programa)
+            Prioridad prioridad = EntradaConsola.convertirANumero(codigoPrioridad)
+                    .map(Prioridad::desdeCodigo)
+                    .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
             NuevaSolicitud datos = new NuevaSolicitud(estudiante.get().getLegajo(), tipo.get(), prioridad, descripcion);
             Solicitud registrada = gestor.registrarSolicitud(datos);
             consola.mostrar("Solicitud registrada con id " + registrada.getId());

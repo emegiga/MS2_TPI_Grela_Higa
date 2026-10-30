@@ -14,8 +14,10 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Pruebas de caracterizacion (golden master) del comportamiento externo del sistema.
@@ -97,11 +99,22 @@ class CaracterizacionConsolaTest {
         assertEquals(leerGolden(nombre), salidaObtenida);
     }
 
+    /**
+     * Test de regresion del defecto CAP-16. En estado-inicial una prioridad no numerica lanzaba
+     * NumberFormatException y cerraba el programa (perdiendo los datos en memoria). Este es el unico
+     * cambio de comportamiento intencional del trabajo: ahora se rechaza como cualquier prioridad
+     * invalida, no consume id y el usuario sigue en el menu.
+     */
     @Test
-    @DisplayName("DEFECTO estado-inicial: prioridad no numerica cierra el programa")
-    void prioridadNoNumericaCierraElPrograma() {
-        org.junit.jupiter.api.Assertions.assertThrows(NumberFormatException.class,
-                () -> EjecutorConsola.ejecutar("1", "5", "1", "Constancia de alumno regular", "ALTA", "0"));
+    @DisplayName("REGRESION CAP-16: una prioridad no numerica se rechaza sin cerrar el programa")
+    void prioridadNoNumericaSeRechazaSinCerrarElPrograma() {
+        String salida = assertDoesNotThrow(() -> EjecutorConsola.ejecutar(
+                "1", "5", "1", "Constancia de alumno regular", "ALTA",
+                "1", "5", "1", "Constancia de alumno regular", "1",
+                "0"));
+
+        assertTrue(salida.contains("Prioridad (1=alta, 2=media, 3=baja): Error: prioridad invalida\n"));
+        assertTrue(salida.contains("Solicitud registrada con id 4\n"));
     }
 
     private static Arguments escenario(String nombre, String... entradas) {
