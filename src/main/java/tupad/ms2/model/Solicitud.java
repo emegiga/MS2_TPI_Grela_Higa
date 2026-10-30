@@ -5,6 +5,8 @@ import tupad.ms2.model.enums.Prioridad;
 import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
+import java.time.LocalDate;
+
 /**
  * Pedido académico de un estudiante. Los datos de alta son inmutables; el estado y el
  * responsable solo cambian a través de métodos que validan las reglas del dominio.
@@ -17,11 +19,11 @@ public class Solicitud {
     private final TipoSolicitud tipo;
     private final Prioridad prioridad;
     private final String descripcion;
-    private final String fecha;
+    private final LocalDate fecha;
     private Responsable responsable;
     private Estado estado;
 
-    public Solicitud(int id, Estudiante estudiante, NuevaSolicitud datos, String fecha) {
+    public Solicitud(int id, Estudiante estudiante, NuevaSolicitud datos, LocalDate fecha) {
         if (datos.descripcion() == null || datos.descripcion().length() < LARGO_MINIMO_DESCRIPCION) {
             throw new ReglaDeNegocioException("descripcion muy corta");
         }
@@ -79,7 +81,7 @@ public class Solicitud {
         return descripcion;
     }
 
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 

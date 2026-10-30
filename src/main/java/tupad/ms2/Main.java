@@ -1,7 +1,7 @@
 package tupad.ms2;
 
+import tupad.ms2.datos.DatosIniciales;
 import tupad.ms2.model.Estudiante;
-import tupad.ms2.model.GestorSolicitudes;
 import tupad.ms2.model.NuevaSolicitud;
 import tupad.ms2.model.Responsable;
 import tupad.ms2.model.Solicitud;
@@ -9,17 +9,25 @@ import tupad.ms2.model.enums.Estado;
 import tupad.ms2.model.enums.Prioridad;
 import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
+import tupad.ms2.repositorio.EstudianteRepositorioEnMemoria;
+import tupad.ms2.repositorio.ResponsableRepositorioEnMemoria;
+import tupad.ms2.repositorio.SolicitudRepositorioEnMemoria;
+import tupad.ms2.servicio.GestorSolicitudes;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        GestorSolicitudes gestor = new GestorSolicitudes();
+        GestorSolicitudes gestor = new GestorSolicitudes(
+                new SolicitudRepositorioEnMemoria(),
+                new EstudianteRepositorioEnMemoria(DatosIniciales.estudiantes()),
+                new ResponsableRepositorioEnMemoria(DatosIniciales.responsables()),
+                Clock.systemDefaultZone());
+        DatosIniciales.cargarSolicitudesDeEjemplo(gestor);
         Scanner scanner = new Scanner(System.in);
         boolean salir = false;
-
-        cargarDatosEjemplo(gestor);
 
         while (!salir) {
             mostrarMenu();
@@ -230,16 +238,6 @@ public class Main {
         System.out.println("Resultados: " + resultados.size());
     }
 
-    // Precarga de solicitudes al iniciar (estudiantes y responsables ya vienen cargados desde GestorSolicitudes).
-    // Como el gestor ya no imprime, no hace falta silenciar la salida estandar.
-    private static void cargarDatosEjemplo(GestorSolicitudes gestor) {
-        gestor.registrarSolicitud(new NuevaSolicitud("L1001", TipoSolicitud.CONSTANCIA, Prioridad.MEDIA, "Constancia de alumno regular"));
-        gestor.registrarSolicitud(new NuevaSolicitud("L1002", TipoSolicitud.RECLAMO, Prioridad.ALTA, "Error en nota del parcial"));
-        gestor.registrarSolicitud(new NuevaSolicitud("L1001", TipoSolicitud.EQUIVALENCIA, Prioridad.BAJA, "Equivalencia de Matematica I"));
-        gestor.asignarResponsable(2, 1);   // Maria Ortega Sánchez (Alumnado)
-        gestor.cambiarEstado(2, Estado.EN_PROCESO);
-    }
-
     private static void mostrarError(ReglaDeNegocioException ex) {
         System.out.println("Error: " + ex.getMessage());
     }
@@ -249,7 +247,7 @@ public class Main {
         System.out.print("Id solicitud: ");
         try {
             int id = Integer.parseInt(scanner.nextLine().trim());
-            return gestor.buscarSolicitudPorId(id);
+            return gestor.buscarSolicitudPorId(id).orElse(null);
         } catch (NumberFormatException ex) {
             return null;
         }
