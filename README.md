@@ -7,7 +7,7 @@
 | Comisión | `1` |
 | Integrantes | `Grela, Ariel` · `Higa, Matias`|
 | Fecha de entrega | `A definir` |
-| Versión actual | `etapa-diagnostico` (Etapa 3 - Deuda técnica y code smells) |
+| Versión actual | `etapa-refactoring` (Etapa 4 y 5 - SOLID, Clean Code y refactoring) |
 
 ---
 
@@ -94,9 +94,9 @@ A completar en entrega final
 |---|---|---|
 | `estado-inicial` | Sistema base con problemas detectables | ✅ Entrega 1 |
 | `etapa-diagnostico` | Diagnóstico de calidad, deuda técnica y code smells | ✅ Entrega 2 |
-| `etapa-refactoring` | Aplicación de SOLID, Clean Code y refactorings | ⏳ Pendiente |
+| `etapa-refactoring` | Aplicación de SOLID, Clean Code y refactorings | ✅ Entrega 3 |
 | `etapa-pruebas` | Casos de prueba y verificación antes/después | ⏳ Pendiente |
-| `etapa-docs` | Code review y documentación final | ✅ Code review ⏳ Code review |
+| `etapa-docs` | Code review y documentación final | ✅ Code review -⏳ Doc final |
 | `estado-refactorizado` | Versión final mejorada | ⏳ Pendiente |
 
 ---
