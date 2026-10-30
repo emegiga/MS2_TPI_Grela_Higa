@@ -1,0 +1,78 @@
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: --- Solicitudes ---
+#1 | Agustin Di Maria | CONSTANCIA | Prioridad 2 | PENDIENTE | SIN ASIGNAR
+#2 | Lucia Kempes | RECLAMO | Prioridad 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
+#3 | Agustin Di Maria | EQUIVALENCIA | Prioridad 3 | PENDIENTE | SIN ASIGNAR
+Id solicitud: Responsable:
+1. Maria Ortega Sánchez (Alumnado)
+2. Jorge Tchami (Alumnado)
+3. Laura Gorosito (Secretaria Academica)
+Opcion: Responsable asignado: Laura Gorosito
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: --- Solicitudes ---
+#1 | Agustin Di Maria | CONSTANCIA | Prioridad 2 | PENDIENTE | SIN ASIGNAR
+#2 | Lucia Kempes | RECLAMO | Prioridad 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
+#3 | Agustin Di Maria | EQUIVALENCIA | Prioridad 3 | PENDIENTE | Laura Gorosito (Secretaria Academica)
+Id solicitud: Responsable actual: Maria Ortega Sánchez (Alumnado). Si elegis otro, se reemplaza.
+Responsable:
+1. Maria Ortega Sánchez (Alumnado)
+2. Jorge Tchami (Alumnado)
+3. Laura Gorosito (Secretaria Academica)
+Opcion: Responsable asignado: Jorge Tchami
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: --- Solicitudes ---
+#1 | Agustin Di Maria | CONSTANCIA | Prioridad 2 | PENDIENTE | SIN ASIGNAR
+#2 | Lucia Kempes | RECLAMO | Prioridad 1 | EN_PROCESO | Jorge Tchami (Alumnado)
+#3 | Agustin Di Maria | EQUIVALENCIA | Prioridad 3 | PENDIENTE | Laura Gorosito (Secretaria Academica)
+Id solicitud: Responsable actual: Jorge Tchami (Alumnado). Si elegis otro, se reemplaza.
+Responsable:
+1. Maria Ortega Sánchez (Alumnado)
+2. Jorge Tchami (Alumnado)
+3. Laura Gorosito (Secretaria Academica)
+Opcion: Opcion invalida
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: ===== REPORTE DE SOLICITUDES =====
+#1 | {HOY} | Agustin Di Maria | CONSTANCIA | Prioridad: 2 | PENDIENTE | SIN ASIGNAR
+#2 | {HOY} | Lucia Kempes | RECLAMO | Prioridad: 1 | EN_PROCESO | Jorge Tchami (Alumnado)
+#3 | {HOY} | Agustin Di Maria | EQUIVALENCIA | Prioridad: 3 | PENDIENTE | Laura Gorosito (Secretaria Academica)
+-----------------------------------
+Total: 3
+Pendientes: 2 | En proceso: 1 | Resueltas: 0 | Rechazadas: 0
+Alta: 1 | Media: 1 | Baja: 1
+
+######################## GESTION DE SOLICITUDES ACADEMICAS ########################
+1. Registrar solicitud
+2. Cambiar estado
+3. Asignar responsable
+4. Buscar / filtrar
+5. Reporte
+0. Salir
+Opcion: 
