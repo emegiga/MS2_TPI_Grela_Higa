@@ -1,9 +1,26 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'jacoco'
 }
 
 group = 'tupad.ms2'
 version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'tupad.ms2.Main'
+}
+
+// Permite usar el menu desde "gradlew run" (por defecto Gradle no conecta el teclado)
+run {
+    standardInput = System.in
+}
 
 repositories {
     mavenCentral()
@@ -15,7 +32,9 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
 
 test {
     useJUnitPlatform()
@@ -24,4 +43,31 @@ test {
     testLogging {
         events 'passed', 'failed', 'skipped'
     }
+    finalizedBy jacocoTestReport
 }
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+// Criterio de aceptación técnica: cobertura mínima de líneas y de ramas (gradlew check)
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                minimum = 0.80
+            }
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
