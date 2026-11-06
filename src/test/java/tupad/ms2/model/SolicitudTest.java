@@ -62,9 +62,9 @@ class SolicitudTest {
         }
 
         @ParameterizedTest(name = "descripción \"{0}\"")
-        @DisplayName("Rechaza descripciones de menos de 5 caracteres o nulas")
+        @DisplayName("Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios")
         @NullSource
-        @ValueSource(strings = {"", "abc", "abcd"})
+        @ValueSource(strings = {"", "abc", "abcd", "     ", " ab ", "  abcd  ", "\t\t\t\t\t"})
         void descripcionMuyCorta(String descripcion) {
             ReglaDeNegocioException ex = assertThrows(ReglaDeNegocioException.class, () -> nuevaSolicitud(descripcion));
             assertEquals("descripcion muy corta", ex.getMessage());
@@ -74,6 +74,7 @@ class SolicitudTest {
         @DisplayName("Acepta una descripción de exactamente 5 caracteres (valor límite)")
         void descripcionEnElLimite() {
             assertDoesNotThrow(() -> nuevaSolicitud("abcde"));
+            assertDoesNotThrow(() -> nuevaSolicitud("  abcde  "));
         }
     }
 

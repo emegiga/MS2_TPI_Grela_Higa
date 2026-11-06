@@ -26,7 +26,8 @@ public class Solicitud {
     private Estado estado;
 
     public Solicitud(int id, Estudiante estudiante, NuevaSolicitud datos, LocalDate fecha) {
-        if (datos.descripcion() == null || datos.descripcion().length() < LARGO_MINIMO_DESCRIPCION) {
+        // Los espacios no cuentan: "     " no es una descripción
+        if (datos.descripcion() == null || datos.descripcion().strip().length() < LARGO_MINIMO_DESCRIPCION) {
             throw new ReglaDeNegocioException("descripcion muy corta");
         }
         this.id = id;
