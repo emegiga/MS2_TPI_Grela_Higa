@@ -37,6 +37,24 @@ class EstadoTest {
     }
 
     @Test
+    @DisplayName("Cada estado tiene la etiqueta con la que se totaliza en el reporte")
+    void etiquetasDelReporte() {
+        assertEquals("Pendientes", Estado.PENDIENTE.getEtiquetaPlural());
+        assertEquals("En proceso", Estado.EN_PROCESO.getEtiquetaPlural());
+        assertEquals("Resueltas", Estado.RESUELTA.getEtiquetaPlural());
+        assertEquals("Rechazadas", Estado.RECHAZADA.getEtiquetaPlural());
+    }
+
+    @Test
+    @DisplayName("Solo EN_PROCESO requiere responsable")
+    void requiereResponsable() {
+        assertFalse(Estado.PENDIENTE.requiereResponsable());
+        assertTrue(Estado.EN_PROCESO.requiereResponsable());
+        assertFalse(Estado.RESUELTA.requiereResponsable());
+        assertFalse(Estado.RECHAZADA.requiereResponsable());
+    }
+
+    @Test
     @DisplayName("Solo RESUELTA y RECHAZADA son estados cerrados")
     void estadosCerrados() {
         assertFalse(Estado.PENDIENTE.esCerrado());

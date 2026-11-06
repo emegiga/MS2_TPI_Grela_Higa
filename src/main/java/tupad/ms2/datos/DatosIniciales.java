@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Datos de ejemplo con los que arranca el sistema. Todos son sintéticos (no corresponden a personas reales).
- * Antes estaban repartidos entre el constructor de GestorSolicitudes y Main.cargarDatosEjemplo().
+ * Están en una clase aparte para que Main solo arme el sistema y el gestor no dependa de datos fijos.
  */
 public final class DatosIniciales {
 
@@ -44,8 +44,8 @@ public final class DatosIniciales {
                 {"Julian Brown", "L1020", "julian.brown@outlook.com"}
         };
         List<Estudiante> estudiantes = new ArrayList<>();
-        for (int i = 0; i < datos.length; i++) {
-            estudiantes.add(new Estudiante(i + 1, datos[i][0], datos[i][1], datos[i][2]));
+        for (String[] estudiante : datos) {
+            estudiantes.add(new Estudiante(estudiante[0], estudiante[1], estudiante[2]));
         }
         return estudiantes;
     }

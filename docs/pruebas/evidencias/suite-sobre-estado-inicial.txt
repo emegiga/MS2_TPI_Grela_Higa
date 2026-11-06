@@ -1,0 +1,31 @@
+# Misma suite de caracterización (CaracterizacionConsolaTest) ejecutada sobre el tag estado-inicial
+# al cierre de la Etapa 6, con los goldens de esa etapa (antes de la corrección CR-01).
+# La ejecución con los goldens finales está en suite-final-sobre-estado-inicial.txt.
+# Se copió solo el código de test y build.gradle; el código de producción es el original (estado-inicial).
+# Resultado esperado: 19 escenarios golden en verde y el test de regresión CAP-16 en rojo
+# (en estado-inicial el defecto existe: NumberFormatException).
+
+        Caused by: java.lang.NumberFormatException at CaracterizacionConsolaTest.java:111
+> Task :test FAILED
+20 tests completed, 1 failed
+BUILD FAILED in 6s
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E01_registrar_solicitud_valida" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E02_registrar_descripcion_corta" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E03_registrar_prioridad_fuera_de_rango" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E04_registrar_prioridad_y_descripcion_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E05_registrar_cancelado" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E06_rechazar_solicitud_sin_responsable" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E07_resolver_y_modificar_solicitud_cerrada" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E08_transiciones_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E09_solicitud_inexistente" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E10_asignar_y_reasignar_responsable" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E11_buscar_por_estado" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E12_buscar_por_tipo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E13_buscar_por_legajo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E14_buscar_por_prioridad" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E15_buscar_con_opciones_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E16_reporte_con_datos_precargados" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E17_menu_opcion_invalida" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E18_ciclo_de_vida_completo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E19_registro_fallido_no_consume_id" PASSED
+CaracterizacionConsolaTest > REGRESION CAP-16: una prioridad no numerica se rechaza sin cerrar el programa FAILED

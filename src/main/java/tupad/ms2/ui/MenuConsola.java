@@ -12,10 +12,12 @@ import tupad.ms2.servicio.FiltrosSolicitud;
 import tupad.ms2.servicio.GestorSolicitudes;
 import tupad.ms2.servicio.ResumenSolicitudes;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Menú principal por consola. Traduce lo que elige el usuario en llamadas al GestorSolicitudes
@@ -26,6 +28,8 @@ public class MenuConsola {
     private static final String TITULO =
             "######################## GESTION DE SOLICITUDES ACADEMICAS ########################";
     private static final String OPCION_SALIR = "0";
+    private static final String SIN_ESTUDIANTES = "No hay estudiantes cargados.";
+    private static final String REGISTRO_CANCELADO = "Registro cancelado.";
 
     /** Cada opción del menú es un objeto con su acción (estilo Command): agregar una es sumar una entrada. */
     private record OpcionMenu(String clave, String titulo, Runnable accion) {
@@ -86,32 +90,36 @@ public class MenuConsola {
     private void registrarSolicitud() {
         List<Estudiante> estudiantes = gestor.getEstudiantes();
         if (estudiantes.isEmpty()) {
-            consola.mostrar("No hay estudiantes cargados.");
+            consola.mostrar(SIN_ESTUDIANTES);
             return;
         }
         Optional<Estudiante> estudiante = consola.elegir("Estudiante:", estudiantes, FormatoSolicitud::estudianteConEmail);
         if (estudiante.isEmpty()) {
-            consola.mostrar("Registro cancelado.");
+            consola.mostrar(REGISTRO_CANCELADO);
             return;
         }
         Optional<TipoSolicitud> tipo = consola.elegir("Tipo:", List.of(TipoSolicitud.values()), Enum::name);
         if (tipo.isEmpty()) {
-            consola.mostrar("Registro cancelado.");
+            consola.mostrar(REGISTRO_CANCELADO);
             return;
         }
         String descripcion = consola.leerLinea("Descripcion: ");
-        String codigoPrioridad = consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): ");
         try {
-            // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango (antes cerraba el programa)
-            Prioridad prioridad = EntradaConsola.convertirANumero(codigoPrioridad)
-                    .map(Prioridad::desdeCodigo)
-                    .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
+            Prioridad prioridad = leerPrioridad();
             NuevaSolicitud datos = new NuevaSolicitud(estudiante.get().getLegajo(), tipo.get(), prioridad, descripcion);
             Solicitud registrada = gestor.registrarSolicitud(datos);
             consola.mostrar("Solicitud registrada con id " + registrada.getId());
         } catch (ReglaDeNegocioException ex) {
             mostrarError(ex);
         }
+    }
+
+    private Prioridad leerPrioridad() {
+        String codigo = consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): ");
+        // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango, sin cerrar el programa
+        return EntradaConsola.convertirANumero(codigo)
+                .map(Prioridad::desdeCodigo)
+                .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
     }
 
     // ---------- 2. Cambiar estado ----------
@@ -122,15 +130,11 @@ public class MenuConsola {
             return;
         }
         Solicitud solicitud = elegida.get();
-        List<Estado> estadosPosibles;
-        if (solicitud.tieneResponsable()) {
-            estadosPosibles = List.of(Estado.EN_PROCESO, Estado.RESUELTA, Estado.RECHAZADA);
-        } else {
+        if (!solicitud.tieneResponsable()) {
             consola.mostrar("La solicitud #" + solicitud.getId() + " no tiene responsable asignado. "
                     + "Solo puede rechazarse; para otros estados asignelo desde la opcion 3.");
-            estadosPosibles = List.of(Estado.RECHAZADA);
         }
-        consola.elegir("Nuevo estado:", estadosPosibles, Enum::name).ifPresent(nuevoEstado -> {
+        consola.elegir("Nuevo estado:", solicitud.estadosPosibles(), Enum::name).ifPresent(nuevoEstado -> {
             try {
                 Solicitud actualizada = gestor.cambiarEstado(solicitud.getId(), nuevoEstado);
                 consola.mostrar("Estado actualizado a " + actualizada.getEstado());
@@ -207,7 +211,7 @@ public class MenuConsola {
     private Optional<Predicate<Solicitud>> elegirFiltroLegajo() {
         List<Estudiante> estudiantes = gestor.getEstudiantes();
         if (estudiantes.isEmpty()) {
-            consola.mostrar("No hay estudiantes cargados.");
+            consola.mostrar(SIN_ESTUDIANTES);
             return Optional.empty();
         }
         return consola.elegir("Estudiante:", estudiantes, FormatoSolicitud::estudiante)
@@ -232,13 +236,13 @@ public class MenuConsola {
         resumen.getSolicitudes().forEach(solicitud -> consola.mostrar(FormatoSolicitud.lineaReporte(solicitud)));
         consola.mostrar("-----------------------------------");
         consola.mostrar("Total: " + resumen.getTotal());
-        consola.mostrar("Pendientes: " + resumen.getTotal(Estado.PENDIENTE)
-                + " | En proceso: " + resumen.getTotal(Estado.EN_PROCESO)
-                + " | Resueltas: " + resumen.getTotal(Estado.RESUELTA)
-                + " | Rechazadas: " + resumen.getTotal(Estado.RECHAZADA));
-        consola.mostrar("Alta: " + resumen.getTotal(Prioridad.ALTA)
-                + " | Media: " + resumen.getTotal(Prioridad.MEDIA)
-                + " | Baja: " + resumen.getTotal(Prioridad.BAJA));
+        // Se recorren los enums: un estado o una prioridad nueva aparece en el reporte sin tocar este método
+        consola.mostrar(Arrays.stream(Estado.values())
+                .map(estado -> estado.getEtiquetaPlural() + ": " + resumen.getTotal(estado))
+                .collect(Collectors.joining(" | ")));
+        consola.mostrar(Arrays.stream(Prioridad.values())
+                .map(prioridad -> prioridad.getEtiqueta() + ": " + resumen.getTotal(prioridad))
+                .collect(Collectors.joining(" | ")));
     }
 
     private void mostrarError(ReglaDeNegocioException ex) {

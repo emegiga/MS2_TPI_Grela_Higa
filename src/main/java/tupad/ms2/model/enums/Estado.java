@@ -1,10 +1,21 @@
 package tupad.ms2.model.enums;
 
 public enum Estado {
-    PENDIENTE,
-    EN_PROCESO,
-    RESUELTA,
-    RECHAZADA;
+    PENDIENTE("Pendientes"),
+    EN_PROCESO("En proceso"),
+    RESUELTA("Resueltas"),
+    RECHAZADA("Rechazadas");
+
+    /** Nombre con el que se totaliza en el reporte, ej: "Pendientes: 2". */
+    private final String etiquetaPlural;
+
+    Estado(String etiquetaPlural) {
+        this.etiquetaPlural = etiquetaPlural;
+    }
+
+    public String getEtiquetaPlural() {
+        return etiquetaPlural;
+    }
 
     /**
      * Reglas del ciclo de vida de una solicitud:
@@ -18,6 +29,11 @@ public enum Estado {
             case EN_PROCESO -> destino == RESUELTA || destino == RECHAZADA;
             case RESUELTA, RECHAZADA -> false;
         };
+    }
+
+    /** Para trabajar una solicitud alguien tiene que hacerse cargo: EN_PROCESO exige responsable. */
+    public boolean requiereResponsable() {
+        return this == EN_PROCESO;
     }
 
     public boolean esCerrado() {

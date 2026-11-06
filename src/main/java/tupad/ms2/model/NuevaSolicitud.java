@@ -5,8 +5,8 @@ import tupad.ms2.model.enums.TipoSolicitud;
 
 /**
  * Datos que ingresa el usuario para registrar una solicitud (Parameter Object).
- * Agrupa en un solo objeto lo que antes viajaba como cuatro parámetros sueltos,
- * dos de ellos del mismo tipo y fáciles de intercambiar por error.
+ * Legajo y descripción son ambos String: como parámetros sueltos serían fáciles de
+ * intercambiar por error; con nombre, cada dato queda identificado.
  */
 public record NuevaSolicitud(String legajo, TipoSolicitud tipo, Prioridad prioridad, String descripcion) {
 }

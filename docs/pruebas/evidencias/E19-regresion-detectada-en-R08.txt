@@ -1,0 +1,9 @@
+# Diff del escenario E19 contra la primera versión de R-08 (antes de corregir el repositorio)
+# '-' = golden generado sobre estado-inicial   '+' = salida obtenida
+
+@@ -70 +70 @@
+-Opcion: Descripcion: Prioridad (1=alta, 2=media, 3=baja): Solicitud registrada con id 4
++Opcion: Descripcion: Prioridad (1=alta, 2=media, 3=baja): Solicitud registrada con id 5
+@@ -83 +83 @@
+-#4 | {HOY} | Tomas Maradona | CONSTANCIA | Prioridad: 2 | PENDIENTE | SIN ASIGNAR
++#5 | {HOY} | Tomas Maradona | CONSTANCIA | Prioridad: 2 | PENDIENTE | SIN ASIGNAR

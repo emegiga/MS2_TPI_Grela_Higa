@@ -1,0 +1,7 @@
+# Test de regresión CAP-16 ejecutado SIN la corrección (paso rojo)
+
+        Caused by: java.lang.NumberFormatException at CaracterizacionConsolaTest.java:111
+    org.opentest4j.AssertionFailedError at CaracterizacionConsolaTest.java:111
+20 tests completed, 1 failed
+BUILD FAILED in 6s
+CaracterizacionConsolaTest > REGRESION CAP-16: una prioridad no numerica se rechaza sin cerrar el programa FAILED

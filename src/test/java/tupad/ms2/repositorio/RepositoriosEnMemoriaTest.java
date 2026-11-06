@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RepositoriosEnMemoriaTest {
 
-    private static final Estudiante ESTUDIANTE = new Estudiante(1, "Estudiante Prueba", "L0001", "e@ejemplo.com");
+    private static final Estudiante ESTUDIANTE = new Estudiante("Estudiante Prueba", "L0001", "e@ejemplo.com");
 
     private static Solicitud solicitud(int id) {
         NuevaSolicitud datos = new NuevaSolicitud("L0001", TipoSolicitud.OTRO, Prioridad.MEDIA, "Descripcion de prueba");

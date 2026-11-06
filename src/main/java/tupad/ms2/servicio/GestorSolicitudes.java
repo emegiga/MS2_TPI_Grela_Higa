@@ -52,13 +52,12 @@ public class GestorSolicitudes {
         return solicitud;
     }
 
-    // Asignar responsable (del listado) a solicitud. Devuelve la solicitud actualizada.
-    public Solicitud asignarResponsable(int id, int idResponsable) {
+    // Asignar responsable (del listado) a solicitud
+    public void asignarResponsable(int id, int idResponsable) {
         Solicitud solicitud = obtenerSolicitud(id);
         Responsable responsable = responsables.buscarPorId(idResponsable)
                 .orElseThrow(() -> new ReglaDeNegocioException("responsable no encontrado"));
         solicitud.asignarResponsable(responsable);
-        return solicitud;
     }
 
     // Buscar / Filtrar: el criterio llega como un filtro ya armado (ver FiltrosSolicitud)

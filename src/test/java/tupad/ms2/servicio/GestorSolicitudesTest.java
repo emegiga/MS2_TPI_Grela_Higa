@@ -36,8 +36,8 @@ class GestorSolicitudesTest {
     private static final ZoneId ZONA = ZoneId.of("America/Argentina/Buenos_Aires");
     private static final Clock RELOJ_FIJO = Clock.fixed(Instant.parse("2026-03-15T12:00:00Z"), ZONA);
 
-    private static final Estudiante ANA = new Estudiante(1, "Ana Prueba", "L0001", "ana@ejemplo.com");
-    private static final Estudiante BRUNO = new Estudiante(2, "Bruno Prueba", "L0002", "bruno@ejemplo.com");
+    private static final Estudiante ANA = new Estudiante("Ana Prueba", "L0001", "ana@ejemplo.com");
+    private static final Estudiante BRUNO = new Estudiante("Bruno Prueba", "L0002", "bruno@ejemplo.com");
     private static final Responsable ALUMNADO = new Responsable(10, "Resp Alumnado", "Alumnado");
 
     private GestorSolicitudes gestor;

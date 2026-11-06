@@ -11,9 +11,8 @@ Opcion: --- Solicitudes ---
 #2 | Lucia Kempes | RECLAMO | Prioridad 1 | EN_PROCESO | Maria Ortega Sánchez (Alumnado)
 #3 | Agustin Di Maria | EQUIVALENCIA | Prioridad 3 | PENDIENTE | SIN ASIGNAR
 Id solicitud: Nuevo estado:
-1. EN_PROCESO
-2. RESUELTA
-3. RECHAZADA
+1. RESUELTA
+2. RECHAZADA
 Opcion: Estado actualizado a RESUELTA
 
 ######################## GESTION DE SOLICITUDES ACADEMICAS ########################

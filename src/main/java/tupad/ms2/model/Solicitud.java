@@ -6,6 +6,8 @@ import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Pedido académico de un estudiante. Los datos de alta son inmutables; el estado y el
@@ -24,7 +26,8 @@ public class Solicitud {
     private Estado estado;
 
     public Solicitud(int id, Estudiante estudiante, NuevaSolicitud datos, LocalDate fecha) {
-        if (datos.descripcion() == null || datos.descripcion().length() < LARGO_MINIMO_DESCRIPCION) {
+        // Los espacios no cuentan: "     " no es una descripción
+        if (datos.descripcion() == null || datos.descripcion().strip().length() < LARGO_MINIMO_DESCRIPCION) {
             throw new ReglaDeNegocioException("descripcion muy corta");
         }
         this.id = id;
@@ -44,11 +47,22 @@ public class Solicitud {
         return responsable != null;
     }
 
+    /**
+     * Estados a los que puede pasar ahora, según el ciclo de vida y si tiene responsable.
+     * La interfaz ofrece solo estos, así no muestra opciones que el dominio después rechaza.
+     */
+    public List<Estado> estadosPosibles() {
+        return Arrays.stream(Estado.values())
+                .filter(destino -> estado.permiteTransicionA(destino))
+                .filter(destino -> !destino.requiereResponsable() || tieneResponsable())
+                .toList();
+    }
+
     public void cambiarEstado(Estado nuevoEstado) {
         if (!estado.permiteTransicionA(nuevoEstado)) {
             throw new ReglaDeNegocioException("transicion invalida");
         }
-        if (nuevoEstado == Estado.EN_PROCESO && !tieneResponsable()) {
+        if (nuevoEstado.requiereResponsable() && !tieneResponsable()) {
             throw new ReglaDeNegocioException("debe asignar responsable primero");
         }
         estado = nuevoEstado;

@@ -1,0 +1,39 @@
+# Suite de caracterización FINAL (goldens con la corrección CR-01) ejecutada sobre el tag estado-inicial
+# Se copiaron solo CaracterizacionConsolaTest, EjecutorConsola, los goldens y build.gradle;
+# el código de producción es el de estado-inicial. Comando: gradlew test
+#
+# Resultado esperado y obtenido: fallan solo los escenarios que cambió a propósito CR-01
+# (E07, E08 y E18: el menú original ofrece otras opciones, así que la misma entrada elige otro estado)
+# y la regresión CAP-16 (el defecto existe en estado-inicial). Los otros 16 escenarios pasan:
+# fuera de esas dos correcciones, el usuario ve exactamente lo mismo que en el sistema original.
+# En E07 la excepción NoSuchElementException indica que, con el menú original, la secuencia de
+# entradas se desfasa y se agota antes de terminar.
+
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E01_registrar_solicitud_valida" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E02_registrar_descripcion_corta" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E03_registrar_prioridad_fuera_de_rango" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E04_registrar_prioridad_y_descripcion_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E05_registrar_cancelado" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E06_rechazar_solicitud_sin_responsable" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E07_resolver_y_modificar_solicitud_cerrada" FAILED
+    java.util.NoSuchElementException at CaracterizacionConsolaTest.java:95
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E08_solo_ofrece_transiciones_validas" FAILED
+    org.opentest4j.AssertionFailedError at CaracterizacionConsolaTest.java:102
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E09_solicitud_inexistente" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E10_asignar_y_reasignar_responsable" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E11_buscar_por_estado" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E12_buscar_por_tipo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E13_buscar_por_legajo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E14_buscar_por_prioridad" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E15_buscar_con_opciones_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E16_reporte_con_datos_precargados" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E17_menu_opcion_invalida" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E18_ciclo_de_vida_completo" FAILED
+    org.opentest4j.AssertionFailedError at CaracterizacionConsolaTest.java:102
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E19_registro_fallido_no_consume_id" PASSED
+CaracterizacionConsolaTest > REGRESION CAP-16: una prioridad no numerica se rechaza sin cerrar el programa FAILED
+    org.opentest4j.AssertionFailedError at CaracterizacionConsolaTest.java:114
+        Caused by: java.lang.NumberFormatException at CaracterizacionConsolaTest.java:114
+20 tests completed, 4 failed
+> Task :test FAILED
+BUILD FAILED in 4s
