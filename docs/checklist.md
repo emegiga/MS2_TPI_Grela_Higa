@@ -20,7 +20,7 @@
 | 🔴 Crítica | Rompe funcionalidad, provoca un cierre inesperado o hace fallar el build/tests. Impide el merge |
 | 🟠 Mayor | Viola una regla de diseño (SOLID, encapsulamiento) o deja información incorrecta. Se corrige antes del merge |
 | 🟡 Menor | Afecta la legibilidad o la consistencia sin riesgo funcional. Se corrige o se acepta como deuda justificada |
-| 🔵 Opcional | Sugrencia. Mejora opcional |
+| 🔵 Opcional | Sugerencia. Mejora opcional |
 
 ---
 
@@ -56,7 +56,7 @@
 | C-04 | No hay números ni strings mágicos | CS-07 | ✅ | `LARGO_MINIMO_DESCRIPCION`, `OPCION_SALIR`, `SIN_RESPONSABLE` |
 | C-05 | No hay listas largas de parámetros (mas de 3) | CS-13 | ✅ | `NuevaSolicitud` (R-06). Los 4 parámetros del constructor del gestor son inyección de dependencias (aceptado) |
 | C-06 | Comentarios explican el *por qué*, no el *qué*.<br>No hay código comentado ni comentarios desactualizados | | ❌ CR-10 | Comentarios "antes…" en `DatosIniciales`, `NuevaSolicitud`, `MenuConsola` |
-| C-07 | Formato es consistente (indentación, imports sin usar, líneas en blanco) | | ❌ CR-12| IntelliJ *Inspect Code* (CAP-75) |
+| C-07 | Formato es consistente (indentación, imports sin usar, líneas en blanco) | | ❌ CR-12 | IntelliJ *Inspect Code* (CAP-75): 6 warnings, 17 weak warnings, 2.466 typos. 5 warnings de Java son reales (ver CR-12). La versión de Gradle y la sugerencia de `record` se descartan; los typos son falsos positivos del diccionario en inglés |
 
 ## 4. Manejo de errores
 
@@ -94,14 +94,14 @@
 | GH-02 | Tags `estado-inicial`, `etapa-diagnostico`, `etapa-refactoring`, `etapa-pruebas`, `etapa-docs` y `estado-refactorizado` presentes | 6.1 | ➖ | Están 4 de 6: `estado-inicial`, `etapa-diagnostico`, `etapa-refactoring`, `etapa-pruebas`. `etapa-docs` y `estado-refactorizado` se crean al cerrar esta etapa |
 | GH-03 | Los commits con mensajes descriptivos y siguen una convención (`refactor:`, `test:`, `docs:`, `fix:`). | 6.1 | ✅ | Conventional Commits con IDs (R-01 a R-10, CAP-16, CR-xx). Única excepción: el commit inicial `df893a7`. Observación: Matías figura con dos autores, "Matias H" (commits locales) y "Matías" (merges desde GitHub) |
 | GH-04 | `/docs` contiene el checklist de code review, las evidencias y las decisiones técnicas | 6.1 | ❌ CR-13 | `docs/` contiene solo este checklist y los PDF del informe y del anexo |
-| GH-05 | `.gitignore` excluye `build/`, `.gradle/`, `.idea/` | | ❌ CR-05 | `.gitignore` excluye `build/`, `.gradle` e `.idea/`, pero `.idea/` estaba versionado (4 archivos). Corrección en `ef745e2`: `git ls-files .idea` → 0 (a verificar en el PR) |
+| GH-05 | `.gitignore` excluye `build/`, `.gradle/`, `.idea/` y no hay archivos del IDE versionados | | ❌ CR-05 | `.gitignore` excluye `build/`, `.gradle` e `.idea/`, pero `.idea/` estaba versionado (4 archivos). Corrección en `ef745e2`: `git ls-files .idea` → 0 (a verificar en el PR) |
 | GH-06 | Los finales de línea son consistentes (sin diffs falsos por CRLF/LF) | | ❌ CR-06 | No había `.gitattributes`. Corrección en `44be626`: `git ls-files --eol` → todos los archivos de texto en LF en el repositorio (a verificar en el PR) |
 
 ## 8. Datos y seguridad
 
 | ID | Criterio | Ref. | Resultado | Evidencia |
 |---|---|---|---|---|
-| S-01 | Todos los datos son sintéticos | Cond. 10 | ❌ CR-09 | `DatosIniciales`: nombres ficticios, pero emails con dominios reales (gmail, outlook, hotmail, yahoo) |
+| S-01 | Todos los datos son sintéticos y no parecen datos reales | Cond. 10 | ❌ CR-09 | `DatosIniciales`: nombres ficticios, pero emails con dominios reales (gmail, outlook, hotmail, yahoo). Aceptado como deuda (CR-09) |
 | S-02 | No hay credenciales, tokens ni rutas locales en el código | | ✅ | `git grep` de rutas locales, contraseñas, tokens y claves en `src/`, `build.gradle` y `README.md`: sin resultados |
 
 ---
@@ -118,9 +118,10 @@
 | CR-06 | GH-06 | Raíz del repo | 🟡 Menor | No hay `.gitattributes`; LF en el repo y CRLF en Windows generan diffs falsos. | Ensucia los reviews. Sugiero `.gitattributes` con `* text=auto eol=lf` y `*.bat text eol=crlf` | | | |
 | CR-07 | C-02, C-03 | `ui/MenuConsola.java` – `registrarSolicitud()` | 🟡 Menor | Método de +30 líneas con 3 tareas y mensajes repetidos. | Sugiero extraer `leerPrioridad()` y pasar los mensajes repetidos a constantes | | | |
 | CR-08 | ER-03 | Mensajes de `ReglaDeNegocioException` | 🟡 Menor | Mensajes en minúscula, sin tildes y repetidos en la UI. | Corregirlos cambia casi todos los golden. | Se acepta como deuda: se prioriza conservar el comportamiento externo verificado en la Etapa 6. | — | 📌 Aceptado como deuda |
-| CR-09 | S-01 | `datos/DatosIniciales.java` | 🔵 Opcional | Emails sintéticos con dominios reales (gmail, outlook…). | Sugiero algo genérico como `@example.com` | | | |
+| CR-09 | S-01 | `datos/DatosIniciales.java` | 🔵 Opcional | Emails sintéticos con dominios reales (gmail, outlook…). | Sugiero algo genérico como `@example.com` | Se acepta como deuda: los nombres y emails son inventados; cambiar el dominio obliga a regenerar 7 escenarios golden (E01–E05, E18, E19) sin cambio de comportamiento. Se documenta en ADR-006. | — | 📌 Aceptado como deuda |
 | CR-10 | C-06 | `DatosIniciales`, `NuevaSolicitud`, `MenuConsola` | 🔵 Opcional | Comentarios que cuentan la historia del código ("antes…"). | La historia ya está en Git. Sugiero dejar solo el porqué del diseño actual | | | |
 | CR-11 | T-04 | `CaracterizacionConsolaTest` | 🔵 Opcional | La fecha se enmascara con `LocalDate.now()` | Riesgo bajo: Corregirlo implica que `Main` reciba un reloj configurable. | Se acepta como deuda. | — | 📌 Aceptado como deuda |
+| CR-12 | C-07 | `GestorSolicitudes`, `Estudiante`, `Responsable`, `CaracterizacionConsolaTest` | 🟡 Menor | Inspect Code reporta: `asignarResponsable()` devuelve un valor que nunca se usa; `Estudiante.getId()` y `Responsable.getArea()` no se usan; 2 líneas en blanco en Javadoc que se ignoran. | El código que no se usa agrega mantenimiento sin aportar nada y tapa las advertencias que importan. Sugiero que `asignarResponsable()` devuelva `void`, borrar los dos getters y usar `<p>` en el Javadoc. Se descartan la versión de Gradle y la conversión a `record` (ver C-07). | | | |
 | CR-13 | GH-04 | `docs/` | 🟡 Menor | `/docs` solo tiene el checklist y los PDF del informe y del anexo; faltan las evidencias de pruebas y las decisiones técnicas que pide la consigna (6.1). | Es parte de lo que se evalúa en la entrega. Sugiero sumar el plan de pruebas con sus evidencias de ejecución y un registro de decisiones técnicas. | | | |
 
 **Estados posibles:** ✅ Corregido · 📌 Aceptado como deuda (con justificación) · ❎ Descartado (con justificación)
