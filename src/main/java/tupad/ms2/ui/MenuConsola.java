@@ -12,10 +12,12 @@ import tupad.ms2.servicio.FiltrosSolicitud;
 import tupad.ms2.servicio.GestorSolicitudes;
 import tupad.ms2.servicio.ResumenSolicitudes;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Menú principal por consola. Traduce lo que elige el usuario en llamadas al GestorSolicitudes
@@ -228,13 +230,13 @@ public class MenuConsola {
         resumen.getSolicitudes().forEach(solicitud -> consola.mostrar(FormatoSolicitud.lineaReporte(solicitud)));
         consola.mostrar("-----------------------------------");
         consola.mostrar("Total: " + resumen.getTotal());
-        consola.mostrar("Pendientes: " + resumen.getTotal(Estado.PENDIENTE)
-                + " | En proceso: " + resumen.getTotal(Estado.EN_PROCESO)
-                + " | Resueltas: " + resumen.getTotal(Estado.RESUELTA)
-                + " | Rechazadas: " + resumen.getTotal(Estado.RECHAZADA));
-        consola.mostrar("Alta: " + resumen.getTotal(Prioridad.ALTA)
-                + " | Media: " + resumen.getTotal(Prioridad.MEDIA)
-                + " | Baja: " + resumen.getTotal(Prioridad.BAJA));
+        // Se recorren los enums: un estado o una prioridad nueva aparece en el reporte sin tocar este método
+        consola.mostrar(Arrays.stream(Estado.values())
+                .map(estado -> estado.getEtiquetaPlural() + ": " + resumen.getTotal(estado))
+                .collect(Collectors.joining(" | ")));
+        consola.mostrar(Arrays.stream(Prioridad.values())
+                .map(prioridad -> prioridad.getEtiqueta() + ": " + resumen.getTotal(prioridad))
+                .collect(Collectors.joining(" | ")));
     }
 
     private void mostrarError(ReglaDeNegocioException ex) {
