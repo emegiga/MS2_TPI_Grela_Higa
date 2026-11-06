@@ -136,6 +136,9 @@ MS2_TPI_Grela_Higa/
 │       │   └── ui/                                # EntradaConsolaTest
 │       └── resources/golden/                      # 19 salidas (E01 a E19)
 ├── docs/
+│   ├── decisiones/                            # ADR-001 a ADR-006 (decisiones técnicas)
+│   ├── pruebas/                               # Plan de pruebas y evidencias de ejecución
+│   ├── refactoring/                           # Registro de refactorings
 │   ├── TPI_MS2_Grela_Higa.pdf                 # Informe
 │   ├── Anexo_TPI_MS2_Grela_Higa.pdf           # Anexo de evidencias
 │   └── checklist.md                           # Checklist de code review (Etapa 7)
