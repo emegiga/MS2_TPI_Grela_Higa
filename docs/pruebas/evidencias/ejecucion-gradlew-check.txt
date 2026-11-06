@@ -1,0 +1,95 @@
+# Ejecucion completa: gradlew clean check (rama review/etapa-7, con las correcciones del code review)
+# JDK 21 - JUnit 6 - JaCoCo
+
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E01_registrar_solicitud_valida" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E02_registrar_descripcion_corta" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E03_registrar_prioridad_fuera_de_rango" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E04_registrar_prioridad_y_descripcion_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E05_registrar_cancelado" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E06_rechazar_solicitud_sin_responsable" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E07_resolver_y_modificar_solicitud_cerrada" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E08_solo_ofrece_transiciones_validas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E09_solicitud_inexistente" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E10_asignar_y_reasignar_responsable" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E11_buscar_por_estado" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E12_buscar_por_tipo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E13_buscar_por_legajo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E14_buscar_por_prioridad" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E15_buscar_con_opciones_invalidas" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E16_reporte_con_datos_precargados" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E17_menu_opcion_invalida" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E18_ciclo_de_vida_completo" PASSED
+CaracterizacionConsolaTest > El comportamiento por consola coincide con el golden master > "E19_registro_fallido_no_consume_id" PASSED
+CaracterizacionConsolaTest > REGRESION CAP-16: una prioridad no numerica se rechaza sin cerrar el programa PASSED
+EstadoTest > Cada estado tiene la etiqueta con la que se totaliza en el reporte PASSED
+EstadoTest > Solo EN_PROCESO requiere responsable PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "PENDIENTE" -> "PENDIENTE": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "PENDIENTE" -> "EN_PROCESO": "true" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "PENDIENTE" -> "RESUELTA": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "PENDIENTE" -> "RECHAZADA": "true" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "EN_PROCESO" -> "PENDIENTE": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "EN_PROCESO" -> "EN_PROCESO": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "EN_PROCESO" -> "RESUELTA": "true" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "EN_PROCESO" -> "RECHAZADA": "true" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RESUELTA" -> "PENDIENTE": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RESUELTA" -> "EN_PROCESO": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RESUELTA" -> "RESUELTA": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RESUELTA" -> "RECHAZADA": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RECHAZADA" -> "PENDIENTE": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RECHAZADA" -> "EN_PROCESO": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RECHAZADA" -> "RESUELTA": "false" PASSED
+EstadoTest > La tabla de transiciones respeta el ciclo de vida de la solicitud > "RECHAZADA" -> "RECHAZADA": "false" PASSED
+EstadoTest > Solo RESUELTA y RECHAZADA son estados cerrados PASSED
+PrioridadTest > Los códigos 1, 2 y 3 corresponden a Alta, Media y Baja PASSED
+PrioridadTest > Un código fuera de rango es una prioridad inválida > código 0 PASSED
+PrioridadTest > Un código fuera de rango es una prioridad inválida > código 4 PASSED
+PrioridadTest > Un código fuera de rango es una prioridad inválida > código -1 PASSED
+PrioridadTest > Un código fuera de rango es una prioridad inválida > código 99 PASSED
+SolicitudTest > Estados posibles (lo que ofrece el menú) > Pendiente sin responsable: solo puede rechazarse PASSED
+SolicitudTest > Estados posibles (lo que ofrece el menú) > Cerrada: no ofrece ningún estado PASSED
+SolicitudTest > Estados posibles (lo que ofrece el menú) > Pendiente con responsable: EN_PROCESO o RECHAZADA PASSED
+SolicitudTest > Estados posibles (lo que ofrece el menú) > En proceso: RESUELTA o RECHAZADA PASSED
+SolicitudTest > Asignación de responsable > Se puede asignar y reemplazar el responsable mientras está abierta PASSED
+SolicitudTest > Asignación de responsable > No se puede asignar responsable a una solicitud cerrada PASSED
+SolicitudTest > Cambio de estado > Una solicitud cerrada no admite más cambios de estado PASSED
+SolicitudTest > Cambio de estado > Puede rechazarse estando pendiente y sin responsable PASSED
+SolicitudTest > Cambio de estado > No puede resolverse sin pasar antes por EN_PROCESO PASSED
+SolicitudTest > Cambio de estado > Ciclo completo: PENDIENTE -> EN_PROCESO -> RESUELTA PASSED
+SolicitudTest > Cambio de estado > No puede pasar a EN_PROCESO sin responsable PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción "null" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción """" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción ""abc"" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción ""abcd"" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción ""     "" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción "" ab "" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción ""  abcd  "" PASSED
+SolicitudTest > Alta de la solicitud > Rechaza descripciones nulas o de menos de 5 caracteres sin contar los espacios > descripción ""\t\t\t\t\t"" PASSED
+SolicitudTest > Alta de la solicitud > Acepta una descripción de exactamente 5 caracteres (valor límite) PASSED
+SolicitudTest > Alta de la solicitud > Nace PENDIENTE, sin responsable y con los datos ingresados PASSED
+RepositoriosEnMemoriaTest > Estudiantes: busca por legajo y no se ve afectado si cambia la lista original PASSED
+RepositoriosEnMemoriaTest > Busca solicitudes por id y lista en orden de alta PASSED
+RepositoriosEnMemoriaTest > siguienteId() no reserva el id: solo avanza al guardar PASSED
+RepositoriosEnMemoriaTest > El listado de solicitudes es de solo lectura PASSED
+RepositoriosEnMemoriaTest > Responsables: busca por id PASSED
+GestorSolicitudesTest > Operar sobre una solicitud inexistente informa 'solicitud no encontrada' PASSED
+GestorSolicitudesTest > Registrar asigna ids correlativos, la fecha del reloj y el estudiante del legajo PASSED
+GestorSolicitudesTest > Sin solicitudes el reporte devuelve todos los totales en cero PASSED
+GestorSolicitudesTest > El reporte totaliza por estado y por prioridad PASSED
+GestorSolicitudesTest > Buscar aplica el filtro recibido (estado, tipo, legajo y prioridad) PASSED
+GestorSolicitudesTest > Un legajo inexistente se rechaza PASSED
+GestorSolicitudesTest > Asignar un responsable inexistente se rechaza PASSED
+GestorSolicitudesTest > Asignar responsable y avanzar el estado hasta RESUELTA PASSED
+GestorSolicitudesTest > Un registro rechazado no consume id (regla del sistema base, escenario E19) PASSED
+EntradaConsolaTest > elegir() numera las opciones desde 1 y devuelve la elegida PASSED
+EntradaConsolaTest > convertirANumero() distingue números de textos PASSED
+EntradaConsolaTest > elegir() informa 'Opcion invalida' y devuelve vacío ante una respuesta fuera de la lista > respuesta ""0"" PASSED
+EntradaConsolaTest > elegir() informa 'Opcion invalida' y devuelve vacío ante una respuesta fuera de la lista > respuesta ""3"" PASSED
+EntradaConsolaTest > elegir() informa 'Opcion invalida' y devuelve vacío ante una respuesta fuera de la lista > respuesta ""-1"" PASSED
+EntradaConsolaTest > elegir() informa 'Opcion invalida' y devuelve vacío ante una respuesta fuera de la lista > respuesta ""dos"" PASSED
+EntradaConsolaTest > elegir() informa 'Opcion invalida' y devuelve vacío ante una respuesta fuera de la lista > respuesta """" PASSED
+EntradaConsolaTest > elegir() informa 'Opcion invalida' y devuelve vacío ante una respuesta fuera de la lista > respuesta "" 1"" PASSED
+EntradaConsolaTest > leerLinea() muestra el mensaje en la misma línea y devuelve lo tipeado PASSED
+
+BUILD SUCCESSFUL in 5s
+
+# Resultado: 88 tests, 0 fallos. Verificacion de cobertura minima (80 %) aprobada.

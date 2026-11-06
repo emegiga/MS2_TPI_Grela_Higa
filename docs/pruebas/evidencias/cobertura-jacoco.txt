@@ -1,0 +1,42 @@
+# Cobertura JaCoCo - gradlew clean check (rama review/etapa-7, con las correcciones del code review)
+# Umbral exigido: 80 % de lineas y 80 % de ramas
+
+Lineas       :  330/341  =  96.8 %
+Ramas        :   90/93   =  96.8 %
+Instrucciones: 1993/2021 =  98.6 %
+Metodos      :  127/128  =  99.2 %
+Clases       :   21/21   = 100.0 %
+
+Detalle por clase (lineas cubiertas/total, ramas cubiertas/total):
+  tupad.ms2.Main                                       L   9/10   R  0/0
+  tupad.ms2.datos.DatosIniciales                       L  12/12   R  2/2
+  tupad.ms2.model.Estudiante                           L   8/8    R  0/0
+  tupad.ms2.model.NuevaSolicitud                       L   1/1    R  0/0
+  tupad.ms2.model.Responsable                          L   8/8    R  0/0
+  tupad.ms2.model.Solicitud                            L  35/35   R 18/18
+  tupad.ms2.model.enums.Estado                         L  15/15   R 17/17
+  tupad.ms2.model.enums.Prioridad                      L  14/14   R  4/4
+  tupad.ms2.model.enums.TipoSolicitud                  L   5/5    R  0/0
+  tupad.ms2.model.excepciones.ReglaDeNegocioException  L   2/2    R  0/0
+  tupad.ms2.repositorio.EstudianteRepositorioEnMemoria L   7/7    R  0/0
+  tupad.ms2.repositorio.ResponsableRepositorioEnMemoria L   7/7    R  2/2
+  tupad.ms2.repositorio.SolicitudRepositorioEnMemoria  L  11/11   R  2/2
+  tupad.ms2.servicio.FiltrosSolicitud                  L   4/4    R  6/6
+  tupad.ms2.servicio.GestorSolicitudes                 L  29/29   R  0/0
+  tupad.ms2.servicio.ResumenSolicitudes                L  17/17   R  6/6
+  tupad.ms2.ui.EntradaConsola                          L  19/19   R  8/8
+  tupad.ms2.ui.FormatoSolicitud                        L  11/11   R  2/2
+  tupad.ms2.ui.MenuConsola                             L 114/124  R 23/26
+  tupad.ms2.ui.MenuConsola$CriterioBusqueda            L   1/1    R  0/0
+  tupad.ms2.ui.MenuConsola$OpcionMenu                  L   1/1    R  0/0
+
+Lineas y ramas sin cubrir (11 lineas, 3 ramas) y por que:
+  Main: constructor por defecto de la clase (nunca se instancia; main es estatico).
+  MenuConsola.registrarSolicitud() y elegirFiltroLegajo(): rama "No hay estudiantes cargados."
+    El sistema siempre arranca con 20 estudiantes y no hay alta ni baja de estudiantes.
+  MenuConsola.elegirSolicitudAbierta(): rama "No hay solicitudes cargadas."
+    Siempre hay 3 solicitudes precargadas y no se pueden borrar.
+  MenuConsola.cambiarEstado() y asignarResponsable(): bloques catch defensivos.
+    El menu ya filtra antes lo que el gestor rechazaria (solicitud inexistente o cerrada,
+    estado no permitido desde CR-01, responsable fuera de la lista). Se conservan por si
+    el dominio agrega una regla nueva; las reglas estan probadas en SolicitudTest y GestorSolicitudesTest.
