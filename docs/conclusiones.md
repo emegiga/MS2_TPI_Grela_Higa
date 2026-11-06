@@ -85,4 +85,8 @@ Usé IA con un grado de intervención alto para generar código, pruebas y docum
 
 ### Conclusión individual — Higa, Matías
 
-[Completar]
+Me tocó la base y el cierre del trabajo: la selección y descripción del sistema, el análisis de calidad externa e interna y el diagnóstico de deuda técnica (etapas 1 a 3), el README, y en la Etapa 7 el armado del checklist y el review del código y las pruebas, además de las correcciones del repositorio (CR-04, CR-05 y CR-06). Lo que más me llevo del diagnóstico es que “funciona” no alcanza: el sistema base cumplía todo lo que veía el usuario, y sin embargo encontrar los 13 code smells con evidencia, ubicación e impacto me mostró cuánto costaba cada cambio.
+
+El code review me enseñó que revisar no es opinar. El review también funcionó en sentido inverso: Ariel encontró que mi primera corrección del README seguía incompleta (CR-04), lo que me mostró el valor de que otro verifique el trabajo propio. Además, un problema de entorno (una tilde en la ruta de mi carpeta impedía que Gradle encontrara las clases de test, mientras en la máquina de Ariel todo pasaba) me dejó claro que “en mi máquina funciona” no es una verificación.
+
+Usé IA (Claude) principalmente para planificar la Etapa 7, armar la estructura del checklist y revisar el código en busca de observaciones. Cada observación la verifiqué en el código y en la ejecución antes de registrarla, y varias decisiones (los IDs, la severidad, qué aceptar como deuda) las ajustamos con Ariel. Mi conclusión es que la IA acelera el análisis, pero el criterio para decidir qué es un problema y qué se corrige tiene que ser nuestro.
