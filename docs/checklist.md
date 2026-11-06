@@ -80,29 +80,29 @@
 
 | ID | Criterio | Ref. | Resultado | Evidencia |
 |---|---|---|---|---|
-| T-01 | gradlew check termina sin errores | Etapa 6 | | |
-| T-02 | Cobertura de JaCoCo ≥ 80 % en líneas y ≥ 80 % en ramas | Etapa 6 | | |
+| T-01 | gradlew check termina sin errores | Etapa 6 | ✅ | `gradlew clean check` → BUILD SUCCESSFUL, 78 tests, 0 fallos (CAP-71) |
+| T-02 | Cobertura de JaCoCo ≥ 80 % en líneas y ≥ 80 % en ramas | Etapa 6 | ✅ | Líneas 96,7 % (326/337) · Ramas 96,6 % (84/87) · Instrucciones 98,5 % (CAP-72) |
 | T-03 | Cada regla de negocio tiene al menos un test válido y otro inválido | | ❌ CR-03 | Falta el caso "descripción solo con espacios" |
 | T-04 | Los tests son independientes, legibles (nombre que describe el escenario) y no dependen de la fecha del sistema. | | ✅ con reserva (CR-11) | `Clock` fijo en `GestorSolicitudesTest`; `CaracterizacionConsolaTest` usa `LocalDate.now()` |
-| T-05 | Los tests de caracterización (golden) siguen pasando sin regenerarse. | Etapa 6 | | |
+| T-05 | Los tests de caracterización (golden) siguen pasando sin regenerarse. | Etapa 6 | ✅ | Los 19 escenarios golden pasan sin regenerar (CAP-71). `git log --name-status -- src/test/resources/golden`: los archivos solo se agregaron, nunca se modificaron |
 
 ## 7. Repositorio y documentación
 
 | ID | Criterio | Ref. | Resultado | Evidencia |
 |---|---|---|---|---|
-| GH-01 | README describe la versión actual | 6.1 | | |
-| GH-02 | Tags `estado-inicial`, `etapa-diagnostico`, `etapa-refactoring`, `etapa-pruebas`, `etapa-docs` y `estado-refactorizado` presentes | 6.1 | | |
-| GH-03 | Los commits con mensajes descriptivos y siguen una convención (`refactor:`, `test:`, `docs:`, `fix:`). | 6.1 | | |
-| GH-04 | `/docs` contiene el checklist de code review, las evidencias y las decisiones técnicas | 6.1 | | |
-| GH-05 | `.gitignore` excluye `build/`, `.gradle/`, `.idea/` | | | |
-| GH-06 | Los finales de línea son consistentes (sin diffs falsos por CRLF/LF) | | | |
+| GH-01 | README describe la versión actual | 6.1 | ❌ CR-04 | `8bbd080` actualiza el README, pero todavía menciona Python 3.12, una búsqueda por responsable que no existe y tiene bloques de código mal cerrados (ver CR-04) |
+| GH-02 | Tags `estado-inicial`, `etapa-diagnostico`, `etapa-refactoring`, `etapa-pruebas`, `etapa-docs` y `estado-refactorizado` presentes | 6.1 | ➖ | Están 4 de 6: `estado-inicial`, `etapa-diagnostico`, `etapa-refactoring`, `etapa-pruebas`. `etapa-docs` y `estado-refactorizado` se crean al cerrar esta etapa |
+| GH-03 | Los commits con mensajes descriptivos y siguen una convención (`refactor:`, `test:`, `docs:`, `fix:`). | 6.1 | ✅ | Conventional Commits con IDs (R-01 a R-10, CAP-16, CR-xx). Única excepción: el commit inicial `df893a7`. Observación: Matías figura con dos autores, "Matias H" (commits locales) y "Matías" (merges desde GitHub) |
+| GH-04 | `/docs` contiene el checklist de code review, las evidencias y las decisiones técnicas | 6.1 | ❌ CR-13 | `docs/` contiene solo este checklist y los PDF del informe y del anexo |
+| GH-05 | `.gitignore` excluye `build/`, `.gradle/`, `.idea/` | | ❌ CR-05 | `.gitignore` excluye `build/`, `.gradle` e `.idea/`, pero `.idea/` estaba versionado (4 archivos). Corrección en `ef745e2`: `git ls-files .idea` → 0 (a verificar en el PR) |
+| GH-06 | Los finales de línea son consistentes (sin diffs falsos por CRLF/LF) | | ❌ CR-06 | No había `.gitattributes`. Corrección en `44be626`: `git ls-files --eol` → todos los archivos de texto en LF en el repositorio (a verificar en el PR) |
 
 ## 8. Datos y seguridad
 
 | ID | Criterio | Ref. | Resultado | Evidencia |
 |---|---|---|---|---|
-| S-01 | Todos los datos son sintéticos | Cond. 10 | | |
-| S-02 | No hay credenciales, tokens ni rutas locales en el código | | | |
+| S-01 | Todos los datos son sintéticos | Cond. 10 | ❌ CR-09 | `DatosIniciales`: nombres ficticios, pero emails con dominios reales (gmail, outlook, hotmail, yahoo) |
+| S-02 | No hay credenciales, tokens ni rutas locales en el código | | ✅ | `git grep` de rutas locales, contraseñas, tokens y claves en `src/`, `build.gradle` y `README.md`: sin resultados |
 
 ---
 
@@ -113,7 +113,7 @@
 | CR-01 | F-05, D-02, M-01 | `ui/MenuConsola.java` – `cambiarEstado()` | 🟠 Mayor | Lista de estados escrita a mano y repite la regla del responsable<br>UI ofrece transiciones que después rechaza (golden E08) | Si cambia el ciclo de vida hay que tocar dos lugares. Sería mejor armar las opciones con `Estado.values()` filtrado por `permiteTransicionA()`. | | | |
 | CR-02 | D-02 | `ui/MenuConsola.java` – `mostrarReporte()` | 🟠 Mayor | El reporte nombra cada estado y prioridad por separado | Si se agrega un estado, el reporte lo omite sin dar error (OCP). Sugiero recorrer los enums y agregar una etiqueta a `Estado`, manteniendo el texto actual | | | |
 | CR-03 | ER-04, T-03 | `model/Solicitud.java` – constructor | 🟠 Mayor | Validación usa `length()`: 5 espacios se aceptan como descripción. No hay test de ese caso. | Es posible saltear una regla de negocio. Sugiero validar y agregar el caso a `SolicitudTest` | | | |
-| CR-04 | GH-01 | `README.md` | 🟠 Mayor | Describe el "sistema base", dice "Python 3.12 / Java 21" y tiene secciones "a completar". | No coincide con el código actual. Sugiero actualizar. | | | |
+| CR-04 | GH-01 | `README.md` | 🟠 Mayor | Describía el "sistema base", decía "Python 3.12 / Java 21" y tenía secciones "a completar". `8bbd080` lo actualiza, pero todavía: (1) "Tecnologías" menciona Python 3.12; (2) "Buscar / filtrar" promete búsqueda por responsable, que el sistema no tiene; (3) los comandos de instalación no están en un bloque de código y en GitHub se ven en una sola línea; (4) el árbol de "Estructura" abre el bloque de código dos veces y queda cortado en `docs/`; (5) el reporte también totaliza por prioridad. | Quien clone el repo se guía por el README, así que tiene que coincidir con el código. Sugiero sacar Python, quitar "o responsable", poner los comandos en un bloque de código y cerrar bien el bloque de la estructura. | | | |
 | CR-05 | GH-05 | `.idea/` | 🟡 Menor | `.idea/gradle.xml`, `misc.xml`, `vcs.xml` y `.gitignore` están versionados aunque `.gitignore` excluye la carpeta. | Generan ruido y conflictos según el IDE de cada uno. Sugiero dejar de versionar la carpeta | | | |
 | CR-06 | GH-06 | Raíz del repo | 🟡 Menor | No hay `.gitattributes`; LF en el repo y CRLF en Windows generan diffs falsos. | Ensucia los reviews. Sugiero `.gitattributes` con `* text=auto eol=lf` y `*.bat text eol=crlf` | | | |
 | CR-07 | C-02, C-03 | `ui/MenuConsola.java` – `registrarSolicitud()` | 🟡 Menor | Método de +30 líneas con 3 tareas y mensajes repetidos. | Sugiero extraer `leerPrioridad()` y pasar los mensajes repetidos a constantes | | | |
@@ -121,6 +121,7 @@
 | CR-09 | S-01 | `datos/DatosIniciales.java` | 🔵 Opcional | Emails sintéticos con dominios reales (gmail, outlook…). | Sugiero algo genérico como `@example.com` | | | |
 | CR-10 | C-06 | `DatosIniciales`, `NuevaSolicitud`, `MenuConsola` | 🔵 Opcional | Comentarios que cuentan la historia del código ("antes…"). | La historia ya está en Git. Sugiero dejar solo el porqué del diseño actual | | | |
 | CR-11 | T-04 | `CaracterizacionConsolaTest` | 🔵 Opcional | La fecha se enmascara con `LocalDate.now()` | Riesgo bajo: Corregirlo implica que `Main` reciba un reloj configurable. | Se acepta como deuda. | — | 📌 Aceptado como deuda |
+| CR-13 | GH-04 | `docs/` | 🟡 Menor | `/docs` solo tiene el checklist y los PDF del informe y del anexo; faltan las evidencias de pruebas y las decisiones técnicas que pide la consigna (6.1). | Es parte de lo que se evalúa en la entrega. Sugiero sumar el plan de pruebas con sus evidencias de ejecución y un registro de decisiones técnicas. | | | |
 
 **Estados posibles:** ✅ Corregido · 📌 Aceptado como deuda (con justificación) · ❎ Descartado (con justificación)
 
