@@ -37,6 +37,15 @@ class EstadoTest {
     }
 
     @Test
+    @DisplayName("Solo EN_PROCESO requiere responsable")
+    void requiereResponsable() {
+        assertFalse(Estado.PENDIENTE.requiereResponsable());
+        assertTrue(Estado.EN_PROCESO.requiereResponsable());
+        assertFalse(Estado.RESUELTA.requiereResponsable());
+        assertFalse(Estado.RECHAZADA.requiereResponsable());
+    }
+
+    @Test
     @DisplayName("Solo RESUELTA y RECHAZADA son estados cerrados")
     void estadosCerrados() {
         assertFalse(Estado.PENDIENTE.esCerrado());

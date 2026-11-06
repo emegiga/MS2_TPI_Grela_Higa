@@ -28,7 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * comportamiento. Mientras estas pruebas sigan en verde, el refactoring no altero lo que
  * ve el usuario.
  *
- * Para regenerar los archivos (solo sobre estado-inicial): -Dgolden.regenerar=true
+ * Excepcion: E07, E08 y E18 se regeneraron con la correccion CR-01 (el menu solo ofrece
+ * las transiciones de estado validas). El diff de ese commit muestra exactamente que cambio.
+ *
+ * Para regenerar los archivos: -Dgolden.regenerar=true (y revisar el diff antes de commitear)
  */
 class CaracterizacionConsolaTest {
 
@@ -50,9 +53,9 @@ class CaracterizacionConsolaTest {
                 escenario("E06_rechazar_solicitud_sin_responsable",
                         "2", "1", "1", "5", "0"),
                 escenario("E07_resolver_y_modificar_solicitud_cerrada",
-                        "2", "2", "2", "2", "2", "3", "2", "0"),
-                escenario("E08_transiciones_invalidas",
-                        "3", "1", "3", "2", "1", "2", "2", "1", "1", "2", "1", "1", "0"),
+                        "2", "2", "1", "2", "2", "3", "2", "0"),
+                escenario("E08_solo_ofrece_transiciones_validas",
+                        "3", "1", "3", "2", "1", "1", "2", "1", "3", "0"),
                 escenario("E09_solicitud_inexistente",
                         "2", "99", "3", "abc", "2", "", "0"),
                 escenario("E10_asignar_y_reasignar_responsable",
@@ -75,7 +78,7 @@ class CaracterizacionConsolaTest {
                         "1", "10", "3", "Nota mal cargada en el acta", "1",
                         "3", "4", "3",
                         "2", "4", "1",
-                        "2", "4", "2",
+                        "2", "4", "1",
                         "4", "1", "3",
                         "5", "0"),
                 escenario("E19_registro_fallido_no_consume_id",
@@ -101,9 +104,9 @@ class CaracterizacionConsolaTest {
 
     /**
      * Test de regresion del defecto CAP-16. En estado-inicial una prioridad no numerica lanzaba
-     * NumberFormatException y cerraba el programa (perdiendo los datos en memoria). Este es el unico
-     * cambio de comportamiento intencional del trabajo: ahora se rechaza como cualquier prioridad
-     * invalida, no consume id y el usuario sigue en el menu.
+     * NumberFormatException y cerraba el programa (perdiendo los datos en memoria). Es uno de los dos
+     * cambios de comportamiento intencionales del trabajo (el otro es CR-01, ver E08): ahora se
+     * rechaza como cualquier prioridad invalida, no consume id y el usuario sigue en el menu.
      */
     @Test
     @DisplayName("REGRESION CAP-16: una prioridad no numerica se rechaza sin cerrar el programa")

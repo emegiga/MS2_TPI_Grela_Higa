@@ -13,6 +13,7 @@ import tupad.ms2.model.enums.TipoSolicitud;
 import tupad.ms2.model.excepciones.ReglaDeNegocioException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -123,6 +124,39 @@ class SolicitudTest {
             solicitud.cambiarEstado(Estado.RECHAZADA);
             assertThrows(ReglaDeNegocioException.class, () -> solicitud.cambiarEstado(Estado.EN_PROCESO));
             assertEquals(Estado.RECHAZADA, solicitud.getEstado());
+        }
+    }
+
+    @Nested
+    @DisplayName("Estados posibles (lo que ofrece el menú)")
+    class EstadosPosibles {
+
+        @Test
+        @DisplayName("Pendiente sin responsable: solo puede rechazarse")
+        void pendienteSinResponsable() {
+            assertEquals(List.of(Estado.RECHAZADA), solicitud.estadosPosibles());
+        }
+
+        @Test
+        @DisplayName("Pendiente con responsable: EN_PROCESO o RECHAZADA")
+        void pendienteConResponsable() {
+            solicitud.asignarResponsable(RESPONSABLE);
+            assertEquals(List.of(Estado.EN_PROCESO, Estado.RECHAZADA), solicitud.estadosPosibles());
+        }
+
+        @Test
+        @DisplayName("En proceso: RESUELTA o RECHAZADA")
+        void enProceso() {
+            solicitud.asignarResponsable(RESPONSABLE);
+            solicitud.cambiarEstado(Estado.EN_PROCESO);
+            assertEquals(List.of(Estado.RESUELTA, Estado.RECHAZADA), solicitud.estadosPosibles());
+        }
+
+        @Test
+        @DisplayName("Cerrada: no ofrece ningún estado")
+        void cerrada() {
+            solicitud.cambiarEstado(Estado.RECHAZADA);
+            assertTrue(solicitud.estadosPosibles().isEmpty());
         }
     }
 

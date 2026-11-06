@@ -20,6 +20,11 @@ public enum Estado {
         };
     }
 
+    /** Para trabajar una solicitud alguien tiene que hacerse cargo: EN_PROCESO exige responsable. */
+    public boolean requiereResponsable() {
+        return this == EN_PROCESO;
+    }
+
     public boolean esCerrado() {
         return this == RESUELTA || this == RECHAZADA;
     }

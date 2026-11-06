@@ -122,15 +122,11 @@ public class MenuConsola {
             return;
         }
         Solicitud solicitud = elegida.get();
-        List<Estado> estadosPosibles;
-        if (solicitud.tieneResponsable()) {
-            estadosPosibles = List.of(Estado.EN_PROCESO, Estado.RESUELTA, Estado.RECHAZADA);
-        } else {
+        if (!solicitud.tieneResponsable()) {
             consola.mostrar("La solicitud #" + solicitud.getId() + " no tiene responsable asignado. "
                     + "Solo puede rechazarse; para otros estados asignelo desde la opcion 3.");
-            estadosPosibles = List.of(Estado.RECHAZADA);
         }
-        consola.elegir("Nuevo estado:", estadosPosibles, Enum::name).ifPresent(nuevoEstado -> {
+        consola.elegir("Nuevo estado:", solicitud.estadosPosibles(), Enum::name).ifPresent(nuevoEstado -> {
             try {
                 Solicitud actualizada = gestor.cambiarEstado(solicitud.getId(), nuevoEstado);
                 consola.mostrar("Estado actualizado a " + actualizada.getEstado());
