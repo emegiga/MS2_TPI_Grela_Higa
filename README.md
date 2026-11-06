@@ -17,7 +17,7 @@ Sistema que permite registrar solicitudes académicas de estudiantes, clasificar
 
 
 
-> Versión refactorizada: El comportamiento externo se conserva respecto de estado-inicial 
+> **Versión refactorizada.** El comportamiento externo se conserva respecto de `estado-inicial` (verificado con 19 escenarios golden) y la estructura interna se reorganizó aplicando SOLID, Clean Code y los refactorings documentados en el informe.
 
 ---
 
@@ -56,36 +56,43 @@ Sistema que permite registrar solicitudes académicas de estudiantes, clasificar
 | 1 | Registrar solicitud | Crea una nueva solicitud vinculada a un estudiante seleccionado del listado. |
 | 2 | Cambiar estado | Actualiza el estado de una solicitud existente. |
 | 3 | Asignar responsable | Asocia un responsable/área a la solicitud. |
-| 4 | Buscar / filtrar | Consulta por estado, tipo, prioridad, estudiante o responsable. |
-| 5 | Reporte básico | Lista las solicitudes con totales por estado. |
+| 4 | Buscar / filtrar | Consulta por estado, tipo, prioridad o legajo del estudiante. |
+| 5 | Reporte básico | Lista las solicitudes con totales por estado y por prioridad. |
 
 ---
 
 ## 🛠️ Tecnologías
 
-- **Lenguaje:** `Python 3.12 (o superior) / Java 21 / Gradle 9 (wrapper incluido) · JUnit 6 · JaCoCo (cobertura)`
-- **Persistencia:** En memoria
-- **Interfaz:** Consola
+- **Lenguaje:** Java 21
+- **Build:** Gradle 9 (wrapper incluido)
+- **Pruebas:** JUnit 6 · JaCoCo (cobertura mínima 80 %)
+- **Persistencia:** en memoria, mediante repositorios
+- **Interfaz:** consola
 - **Control de versiones:** Git + GitHub
 
 ---
 
 ## 🚀 Instalación y uso
-git clone https://github.com/emegiga/MS2_TPI_Grela_Higa.git
-cd MS2_TPI_Grela_Higa
-gradlew run          
-gradlew test         ejecuta las pruebas
-gradlew check        pruebas + verificación de cobertura mínima (80 %)
 
 ### Requisitos previos
-JDK 21. No hace falta instalar Gradle, porque se usa el wrapper.
+JDK 21. No hace falta instalar Gradle: se usa el wrapper incluido.
+
+### Comandos
+```bash
+git clone https://github.com/emegiga/MS2_TPI_Grela_Higa.git
+cd MS2_TPI_Grela_Higa
+gradlew run      # ejecuta el sistema (Linux/Mac: ./gradlew run)
+gradlew test     # ejecuta las pruebas
+gradlew check    # pruebas + verificación de cobertura mínima (80 %)
+```
+
+El reporte de cobertura queda en `build/reports/jacoco/test/html/index.html`.
 
 
 ---
 
 ## 📁 Estructura del repositorio
 
-```
 ```
 MS2_TPI_Grela_Higa/
 ├── src/
@@ -129,7 +136,16 @@ MS2_TPI_Grela_Higa/
 │       │   └── ui/                                # EntradaConsolaTest
 │       └── resources/golden/                      # 19 salidas (E01 a E19)
 ├── docs/
-│   ├── TPI_MS2_Grela_Higa.pdf                 
+│   ├── TPI_MS2_Grela_Higa.pdf                 # Informe
+│   ├── Anexo_TPI_MS2_Grela_Higa.pdf           # Anexo de evidencias
+│   └── checklist.md                           # Checklist de code review (Etapa 7)
+├── gradle/wrapper/                            # Gradle Wrapper
+├── build.gradle                               # Dependencias, JaCoCo y cobertura mínima
+├── settings.gradle
+├── gradlew / gradlew.bat
+├── .gitignore
+├── .gitattributes                             # Finales de línea consistentes (CR-06)
+└── README.md
 ```
 
 
@@ -156,7 +172,7 @@ Todos los datos utilizados son **sintéticos o anonimizados**. No se emplean dat
 
 ## 🤖 Uso de IA
 
-La evidencia de los intercambios relevantes se encuentra en `docs/` y en el anexo del informe.
+La evidencia de los intercambios relevantes se encuentra en el anexo del informe (`docs/Anexo_TPI_MS2_Grela_Higa.pdf`).
 
 ---
 
