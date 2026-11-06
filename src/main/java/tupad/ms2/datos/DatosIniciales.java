@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Datos de ejemplo con los que arranca el sistema. Todos son sintéticos (no corresponden a personas reales).
- * Antes estaban repartidos entre el constructor de GestorSolicitudes y Main.cargarDatosEjemplo().
+ * Están en una clase aparte para que Main solo arme el sistema y el gestor no dependa de datos fijos.
  */
 public final class DatosIniciales {
 

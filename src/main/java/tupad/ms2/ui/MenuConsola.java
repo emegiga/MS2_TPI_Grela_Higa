@@ -116,7 +116,7 @@ public class MenuConsola {
 
     private Prioridad leerPrioridad() {
         String codigo = consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): ");
-        // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango (antes cerraba el programa)
+        // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango, sin cerrar el programa
         return EntradaConsola.convertirANumero(codigo)
                 .map(Prioridad::desdeCodigo)
                 .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
