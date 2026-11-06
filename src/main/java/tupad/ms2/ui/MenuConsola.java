@@ -28,6 +28,8 @@ public class MenuConsola {
     private static final String TITULO =
             "######################## GESTION DE SOLICITUDES ACADEMICAS ########################";
     private static final String OPCION_SALIR = "0";
+    private static final String SIN_ESTUDIANTES = "No hay estudiantes cargados.";
+    private static final String REGISTRO_CANCELADO = "Registro cancelado.";
 
     /** Cada opción del menú es un objeto con su acción (estilo Command): agregar una es sumar una entrada. */
     private record OpcionMenu(String clave, String titulo, Runnable accion) {
@@ -88,32 +90,36 @@ public class MenuConsola {
     private void registrarSolicitud() {
         List<Estudiante> estudiantes = gestor.getEstudiantes();
         if (estudiantes.isEmpty()) {
-            consola.mostrar("No hay estudiantes cargados.");
+            consola.mostrar(SIN_ESTUDIANTES);
             return;
         }
         Optional<Estudiante> estudiante = consola.elegir("Estudiante:", estudiantes, FormatoSolicitud::estudianteConEmail);
         if (estudiante.isEmpty()) {
-            consola.mostrar("Registro cancelado.");
+            consola.mostrar(REGISTRO_CANCELADO);
             return;
         }
         Optional<TipoSolicitud> tipo = consola.elegir("Tipo:", List.of(TipoSolicitud.values()), Enum::name);
         if (tipo.isEmpty()) {
-            consola.mostrar("Registro cancelado.");
+            consola.mostrar(REGISTRO_CANCELADO);
             return;
         }
         String descripcion = consola.leerLinea("Descripcion: ");
-        String codigoPrioridad = consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): ");
         try {
-            // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango (antes cerraba el programa)
-            Prioridad prioridad = EntradaConsola.convertirANumero(codigoPrioridad)
-                    .map(Prioridad::desdeCodigo)
-                    .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
+            Prioridad prioridad = leerPrioridad();
             NuevaSolicitud datos = new NuevaSolicitud(estudiante.get().getLegajo(), tipo.get(), prioridad, descripcion);
             Solicitud registrada = gestor.registrarSolicitud(datos);
             consola.mostrar("Solicitud registrada con id " + registrada.getId());
         } catch (ReglaDeNegocioException ex) {
             mostrarError(ex);
         }
+    }
+
+    private Prioridad leerPrioridad() {
+        String codigo = consola.leerLinea("Prioridad (1=alta, 2=media, 3=baja): ");
+        // Un texto no numerico ("ALTA") se rechaza igual que un numero fuera de rango (antes cerraba el programa)
+        return EntradaConsola.convertirANumero(codigo)
+                .map(Prioridad::desdeCodigo)
+                .orElseThrow(() -> new ReglaDeNegocioException("prioridad invalida"));
     }
 
     // ---------- 2. Cambiar estado ----------
@@ -205,7 +211,7 @@ public class MenuConsola {
     private Optional<Predicate<Solicitud>> elegirFiltroLegajo() {
         List<Estudiante> estudiantes = gestor.getEstudiantes();
         if (estudiantes.isEmpty()) {
-            consola.mostrar("No hay estudiantes cargados.");
+            consola.mostrar(SIN_ESTUDIANTES);
             return Optional.empty();
         }
         return consola.elegir("Estudiante:", estudiantes, FormatoSolicitud::estudiante)
