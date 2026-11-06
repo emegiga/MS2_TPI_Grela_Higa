@@ -21,16 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Pruebas de caracterizacion (golden master) del comportamiento externo del sistema.
- *
+ * <p>
  * Cada escenario tipea una secuencia de entradas en la consola y compara TODO lo que el
  * sistema imprime contra un archivo aprobado en src/test/resources/golden/. Los archivos
  * se generaron ejecutando la version estado-inicial, por lo que documentan su
  * comportamiento. Mientras estas pruebas sigan en verde, el refactoring no altero lo que
  * ve el usuario.
- *
+ * <p>
  * Excepcion: E07, E08 y E18 se regeneraron con la correccion CR-01 (el menu solo ofrece
  * las transiciones de estado validas). El diff de ese commit muestra exactamente que cambio.
- *
+ * <p>
  * Para regenerar los archivos: -Dgolden.regenerar=true (y revisar el diff antes de commitear)
  */
 class CaracterizacionConsolaTest {

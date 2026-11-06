@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SolicitudTest {
 
     private static final LocalDate FECHA = LocalDate.of(2026, 10, 28);
-    private static final Estudiante ESTUDIANTE = new Estudiante(1, "Estudiante Prueba", "L9001", "prueba@ejemplo.com");
+    private static final Estudiante ESTUDIANTE = new Estudiante("Estudiante Prueba", "L9001", "prueba@ejemplo.com");
     private static final Responsable RESPONSABLE = new Responsable(1, "Responsable Prueba", "Alumnado");
     private static final Responsable OTRO_RESPONSABLE = new Responsable(2, "Otro Responsable", "Secretaria Academica");
 
