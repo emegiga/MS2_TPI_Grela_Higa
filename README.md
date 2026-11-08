@@ -6,7 +6,7 @@
 |---|---|
 | Comisión | `1` |
 | Integrantes | `Grela, Ariel` · `Higa, Matias`|
-| Fecha de entrega | `A definir` |
+| Fecha de entrega | `08/11/2026` |
 | Versión actual | `etapa-docs` (Etapa 7 - Code review) |
 
 ---
